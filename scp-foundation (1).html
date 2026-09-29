@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP FOUNDATION — Interne Referenzakte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0c;
+    --surface:#161513;
+    --surface-2:#1e1c19;
+    --paper:#e9e4d8;
+    --ink:#1a1a1a;
+    --bone:#e8e3d6;
+    --muted:#8a8478;
+    --rule:#3a352e;
+    --red:#a91d1d;
+    --red-bright:#d13030;
+    --amber:#c99a2e;
+    --green:#4c7a4c;
+    --keter-glow: rgba(169,29,29,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top, #141311 0%, var(--bg) 55%),
+      var(--bg);
+    color:var(--bone);
+    font-family:'Source Serif 4', Georgia, serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--red); color:#fff;}
+
+  a{color:inherit;}
+
+  .mono{font-family:'JetBrains Mono', monospace;}
+  .stamp-font{font-family:'Courier Prime', monospace;}
+
+  /* Top classification bar */
+  .classbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--red);
+    color:#fff;
+    font-family:'Courier Prime', monospace;
+    font-weight:700;
+    letter-spacing:.12em;
+    font-size:.72rem;
+    text-align:center;
+    padding:6px 8px;
+    text-transform:uppercase;
+    border-bottom:2px solid #000;
+  }
+
+  nav{
+    position:sticky; top:29px; z-index:49;
+    background:rgba(12,12,12,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule);
+    display:flex; flex-wrap:wrap; gap:2px;
+    padding:10px 18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.05em;
+  }
+  nav a{
+    color:var(--muted);
+    text-decoration:none;
+    padding:6px 10px;
+    border:1px solid transparent;
+    transition:color .2s, border-color .2s, background .2s;
+    white-space:nowrap;
+  }
+  nav a:hover, nav a:focus-visible{
+    color:var(--bone);
+    border-color:var(--rule);
+    background:var(--surface);
+  }
+
+  main{max-width:980px; margin:0 auto; padding:0 24px 100px;}
+
+  /* HERO */
+  .hero{
+    padding:70px 0 50px;
+    border-bottom:1px double var(--rule);
+    position:relative;
+  }
+  .hero .eyebrow{
+    font-family:'Courier Prime', monospace;
+    color:var(--red-bright);
+    letter-spacing:.3em;
+    font-size:.7rem;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Courier Prime', monospace;
+    font-size:clamp(2.4rem, 7vw, 4.6rem);
+    line-height:1.02;
+    margin:0 0 20px;
+    letter-spacing:.01em;
+  }
+  .hero h1 span{color:var(--red-bright);}
+  .hero .sub{
+    max-width:560px;
+    color:var(--muted);
+    font-size:1.05rem;
+  }
+  .hero .motto{
+    margin-top:34px;
+    font-family:'Courier Prime', monospace;
+    letter-spacing:.35em;
+    font-size:.85rem;
+    color:var(--bone);
+    text-transform:uppercase;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:14px 0;
+    display:inline-block;
+  }
+
+  /* Redaction — signature interactive element */
+  .redacted{
+    background:#0a0a0a;
+    color:transparent;
+    cursor:pointer;
+    padding:0 2px;
+    border-radius:1px;
+    box-shadow:0 0 0 1px #000;
+    transition:background .25s ease, color .1s ease .1s;
+    user-select:none;
+  }
+  .redacted:hover, .redacted:focus-visible, .redacted.revealed{
+    background:transparent;
+    color:var(--red-bright);
+    box-shadow:none;
+  }
+  .redacted:focus-visible{outline:1px dashed var(--amber); outline-offset:2px;}
+  .hint{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.68rem;
+    color:var(--muted);
+    letter-spacing:.05em;
+    margin-top:10px;
+  }
+
+  section{padding:56px 0; border-bottom:1px solid var(--rule);}
+  section:last-of-type{border-bottom:none;}
+
+  .sec-head{
+    display:flex; align-items:baseline; gap:16px;
+    margin-bottom:8px;
+  }
+  .sec-num{
+    font-family:'Courier Prime', monospace;
+    color:var(--red-bright);
+    font-size:.85rem;
+  }
+  h2{
+    font-family:'Courier Prime', monospace;
+    font-size:1.7rem;
+    margin:0;
+    letter-spacing:.02em;
+  }
+  .sec-intro{color:var(--muted); max-width:680px; margin:14px 0 32px; font-size:.98rem;}
+
+  p{margin:0 0 16px;}
+
+  /* Info grid / dossier cards */
+  .grid{display:grid; gap:18px;}
+  .grid-2{grid-template-columns:repeat(auto-fit, minmax(260px,1fr));}
+  .grid-3{grid-template-columns:repeat(auto-fit, minmax(220px,1fr));}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    padding:20px 22px;
+    position:relative;
+  }
+  .card h3{
+    font-family:'Courier Prime', monospace;
+    font-size:1rem;
+    margin:0 0 10px;
+    letter-spacing:.02em;
+  }
+  .card p{color:var(--muted); font-size:.92rem; margin:0;}
+  .card ul{margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:.9rem;}
+  .card li{margin-bottom:4px;}
+  a:has(> .card){transition:transform .15s ease;}
+  a:has(> .card):hover .card, a:has(> .card):focus-visible .card{border-color:var(--red-bright);}
+  a:has(> .card):hover{transform:translateY(-2px);}
+
+  /* Object class badges */
+  .badge{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.68rem;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border:1px solid currentColor;
+    margin-bottom:10px;
+  }
+  .b-safe{color:var(--green);}
+  .b-euclid{color:var(--amber);}
+  .b-keter{color:var(--red-bright);}
+  .b-thaumiel{color:#7ba7c9;}
+  .b-neutral{color:var(--muted);}
+  .b-apollyon{color:#e8e3d6; background:var(--red); border-color:var(--red);}
+
+  /* SCP file cards */
+  .scp-card{
+    background:linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    border:1px solid var(--rule);
+    padding:20px;
+  }
+  .scp-card .item-no{
+    font-family:'Courier Prime', monospace;
+    font-size:1.3rem;
+    color:var(--bone);
+  }
+  .scp-card p{font-size:.88rem; color:var(--muted);}
+
+  .keter-card{box-shadow: 0 0 0 1px var(--red), 0 0 26px -6px var(--keter-glow);}
+
+  table{width:100%; border-collapse:collapse; font-size:.9rem;}
+  th,td{border:1px solid var(--rule); padding:10px 12px; text-align:left; vertical-align:top;}
+  th{font-family:'JetBrains Mono', monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); background:var(--surface);}
+  td{color:var(--bone);}
+  td.dim{color:var(--muted); font-size:.85rem;}
+
+  .timeline{border-left:2px solid var(--rule); margin-left:6px; padding-left:24px;}
+  .tl-item{position:relative; padding-bottom:26px;}
+  .tl-item::before{
+    content:''; position:absolute; left:-30px; top:4px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--red-bright); box-shadow:0 0 0 3px var(--bg);
+  }
+  .tl-year{font-family:'Courier Prime', monospace; color:var(--red-bright); font-size:.85rem; margin-bottom:4px;}
+  .tl-item p{margin:0; color:var(--muted); font-size:.92rem;}
+
+  .disclaimer{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-left:3px solid var(--red);
+    padding:18px 22px;
+    font-size:.85rem;
+    color:var(--muted);
+    margin-top:20px;
+  }
+  .disclaimer strong{color:var(--bone);}
+
+  footer{
+    max-width:980px; margin:0 auto; padding:40px 24px 80px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem; color:var(--muted); letter-spacing:.04em;
+    text-align:center;
+  }
+
+  a.license-link{color:var(--red-bright); text-decoration:underline;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; scroll-behavior:auto !important;}
+  }
+
+  @media (max-width:640px){
+    .hero{padding:50px 0 34px;}
+    nav{top:29px; font-size:.66rem;}
+    main{padding:0 16px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="classbar">▲ CLASSIFIED — FOUNDATION SECURITY CLEARANCE ERFORDERLICH — NUR ZU REFERENZZWECKEN ▲</div>
+
+<nav>
+  <a href="#ueberblick">00 · Überblick</a>
+  <a href="#struktur">01 · Struktur</a>
+  <a href="#klassen">02 · Objektklassen</a>
+  <a href="#scps">03 · Akten</a>
+  <a href="#gruppen">04 · Gruppen von Interesse</a>
+  <a href="#taskforces">05 · Mobile Task Forces</a>
+  <a href="#andere-einheiten">06 · Andere Einheiten</a>
+  <a href="#abteilungen">07 · Abteilungen</a>
+  <a href="#kanon">08 · Kanon &amp; Fiktion</a>
+  <a href="#geschichte">09 · Realweltgeschichte</a>
+  <a href="#medien">10 · Ableger &amp; Medien</a>
+  <a href="scp-foundation-akten-archiv.html">11 · Akten-Archiv →</a>
+  <a href="scp-foundation-quellen.html">12 · Quellen →</a>
+</nav>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="eyebrow">Site-19 // Interne Wissensdatenbank</div>
+    <h1>SCP <span>FOUNDATION</span></h1>
+    <p class="sub">Eine Sammlung von allem, was über die SCP Foundation bekannt ist — ihre Struktur, ihr Klassifizierungssystem, ihre bekanntesten Akten und ihre reale Entstehungsgeschichte als offenes Schreibprojekt.</p>
+    <div class="motto">Secure. Contain. Protect.</div>
+    <p class="hint">Als <span class="redacted" tabindex="0" role="button" aria-label="Geschwärzten Text anzeigen">geschwärzte Textstellen</span> markierte Begriffe lassen sich anklicken oder mit der Tastatur fokussieren, um sie sichtbar zu machen.</p>
+  </section>
+
+  <section id="ueberblick">
+    <div class="sec-head"><span class="sec-num">00</span><h2>Was ist die SCP Foundation?</h2></div>
+    <p class="sec-intro">Kurz gefasst: eine fiktive Geheimorganisation — und ein sehr reales, community-getragenes Schreibprojekt.</p>
+
+    <p>Die SCP Foundation ist zunächst eine <strong>fiktive Organisation</strong>, deren Auftrag es ist, anomale Objekte, Entitäten und Phänomene aufzuspüren, zu sichern und vor der Öffentlichkeit zu verbergen — daher das Motto <em>„Secure, Contain, Protect“</em>. Jedes anomale Objekt erhält eine Akte mit der Bezeichnung <span class="redacted" tabindex="0">SCP-XXX</span>, die Beschreibung, Gefährdungsgrad, Eindämmungsprotokoll (Containment Procedures) und Vorfallberichte enthält.</p>
+
+    <p>Gleichzeitig ist „SCP Foundation“ der Name des <strong>realen Wikis</strong> (scpwiki.com, früher scp-wiki.net), auf dem tausende Autor:innen weltweit gemeinsam an diesem fiktiven Universum schreiben. Es handelt sich um eines der größten kollaborativen Fiktionsprojekte im Internet, mit Ablegern in über 20 Sprachen, eigenen Kanons, Wikis, Podcasts, Spielen und Kurzfilmen.</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Fiktive Ebene</h3>
+        <p>Eine geheime, weltweit operierende Organisation außerhalb staatlicher Kontrolle, die Anomalien der Menschheit fernhält, um die Illusion von Normalität aufrechtzuerhalten.</p>
+      </div>
+      <div class="card">
+        <h3>Reale Ebene</h3>
+        <p>Ein offenes, gemeinschaftlich geschriebenes Wiki-Projekt unter Creative-Commons-Lizenz, getragen von einer aktiven internationalen Autor:innen-Community.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="struktur">
+    <div class="sec-head"><span class="sec-num">01</span><h2>Innere Struktur der Foundation</h2></div>
+    <p class="sec-intro">Wie die fiktive Organisation intern aufgebaut ist — Führung, Ethik, Standorte und Einsatzkräfte.</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>O5-Rat (Overseer Council)</h3>
+        <p>Die höchste Führungsebene, bestehend aus 13 anonymen Mitgliedern, die strategische Entscheidungen treffen, besonders gefährliche Objekte autorisieren und selbst innerhalb der Foundation nahezu unbekannt bleiben.</p>
+      </div>
+      <div class="card">
+        <h3>Ethikkomitee</h3>
+        <p>Prüft und genehmigt moralisch fragwürdige Forschungsvorhaben, Experimente an Personal oder Testsubjekten sowie die Nutzung besonders riskanter Eindämmungsmethoden.</p>
+      </div>
+      <div class="card">
+        <h3>Standorte (Sites &amp; Areas)</h3>
+        <p>Weltweit verteilte, meist unterirdische oder getarnte Einrichtungen, in denen Objekte eingedämmt und erforscht werden — nummeriert wie Site-19, Site-17 oder Area-14.</p>
+      </div>
+      <div class="card">
+        <h3>Mobile Task Forces (MTF)</h3>
+        <p>Spezialeinheiten für Feldeinsätze: Bergung neuer Anomalien, Kämpfe gegen feindliche Gruppen oder Eindämmung außer Kontrolle geratener Objekte. Bekannt u. a. Epsilon-11 „Nine-Tailed Fox“ und Alpha-1 „Red Right Hand“.</p>
+      </div>
+      <div class="card">
+        <h3>Personal-Klassen</h3>
+        <p>Zugriffsrechte werden in Sicherheitsstufen (Level 1–5) und Personalklassen (A, B, C, D, E) unterteilt — Klasse D etwa bezeichnet Testpersonal, das für gefährliche Experimente eingesetzt wird.</p>
+      </div>
+      <div class="card">
+        <h3>Amnestika</h3>
+        <p>Fiktive Substanzen und Technologien zur gezielten Erinnerungslöschung bei Zeugen anomaler Ereignisse, um Geheimhaltung nach außen zu wahren.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="klassen">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Objektklassen &amp; Klassifizierungssysteme</h2></div>
+    <p class="sec-intro">Jede Akte trägt mindestens eine Objektklasse, die grob beschreibt, wie schwer das Objekt einzudämmen ist.</p>
+
+    <div class="grid grid-3">
+      <div class="card"><span class="badge b-safe">Safe</span><p>Leicht und zuverlässig einzudämmen, oft mit einfachen Mitteln — sagt nichts über Gefährlichkeit im Umgang aus.</p></div>
+      <div class="card"><span class="badge b-euclid">Euclid</span><p>Unvorhersehbar oder unzureichend verstanden; Eindämmung erfordert kontinuierlichen Aufwand und Ressourcen.</p></div>
+      <div class="card"><span class="badge b-keter">Keter</span><p>Extrem schwer einzudämmen, oft mit hohem Ausbruchsrisiko oder aktivem Eigenwillen des Objekts.</p></div>
+      <div class="card"><span class="badge b-thaumiel">Thaumiel</span><p>Selten vergebene Klasse für Objekte, die die Foundation aktiv nutzt, um andere Anomalien einzudämmen oder zu bekämpfen.</p></div>
+      <div class="card"><span class="badge b-neutral">Neutralized / Explained</span><p>Objekte, die ihre Anomalität verloren haben oder deren Phänomen inzwischen wissenschaftlich erklärt werden konnte.</p></div>
+      <div class="card"><span class="badge b-apollyon">Apollyon</span><p>Selten vergeben für Objekte, deren Eindämmung faktisch unmöglich ist und deren Ausbruch bereits läuft oder unausweichlich scheint.</p></div>
+    </div>
+
+    <p style="margin-top:28px; color:var(--muted); font-size:.92rem;">Neben der klassischen Dreiteilung nutzt das Wiki seit einer Reform zusätzliche, feinere Systeme: die <strong>Disruption Class</strong> (u. a. Dark, Vlam, Keneq, Ekhi, Amida — wie stark ein Objekt das öffentliche Bewusstsein stört) und die <strong>Risk Class</strong> (Notice, Caution, Warning, Danger, Critical, Hazardous — wie riskant der Umgang mit dem Objekt für Personal ist).</p>
+  </section>
+
+  <section id="scps">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Bekannte Akten (Auswahl)</h2></div>
+    <p class="sec-intro">Eine kleine, sehr unvollständige Auswahl besonders bekannter oder einflussreicher SCPs — bei über 8.000 aktiven Akten im Hauptkanon ist eine vollständige Liste hier nicht sinnvoll darstellbar.</p>
+
+    <div class="grid grid-3">
+      <div class="scp-card">
+        <div class="item-no">SCP-173</div>
+        <span class="badge b-euclid">Euclid</span>
+        <p>Die allererste veröffentlichte Akte des Wikis: eine bewegliche Betonstatue, die sich nur fortbewegt, wenn niemand sie direkt ansieht.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-096</div>
+        <span class="badge b-euclid">Euclid</span>
+        <p>Eine harmlos wirkende, extrem schnelle Entität, die unkontrollierbar aggressiv reagiert, sobald jemand ihr Gesicht sieht — auch auf Fotos.</p>
+      </div>
+      <div class="scp-card keter-card">
+        <div class="item-no">SCP-682</div>
+        <span class="badge b-keter">Keter</span>
+        <p>Ein extrem widerstandsfähiges, reptilähnliches Wesen mit tiefem Hass auf alles Leben, das nahezu jede Zerstörungsmethode übersteht und sich stetig anpasst.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-049</div>
+        <span class="badge b-euclid">Euclid</span>
+        <p>Eine pestarztähnliche Gestalt, überzeugt davon, eine tödliche „Seuche“ heilen zu müssen — ihre Berührung tötet und verwandelt jedoch die Betroffenen.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-999</div>
+        <span class="badge b-safe">Safe</span>
+        <p>Eine gallertartige, orangefarbene Entität, bekannt als „Tickle Monster“ — eines der wenigen durchweg freundlichen und beliebten Objekte im Kanon.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-3999</div>
+        <span class="badge b-thaumiel">Thaumiel</span>
+        <p>Eine vielbeachtete, sehr persönlich erzählte Akte über einen sterbenden Foundation-Forscher und eine parasitäre Rettungs-Entität.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-2317</div>
+        <span class="badge b-keter">Keter</span>
+        <p>Ein Portal zu einer außerweltlichen Region, verknüpft mit einer bedrohlichen, gottähnlichen Figur, die in mehrere größere Handlungsstränge des Kanons eingebunden ist.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-055</div>
+        <span class="badge b-keter">Keter</span>
+        <p>Ein bewusst „selbst-redigierendes“ Objekt: Seine grundlegenden Eigenschaften können per Definition nicht beschrieben oder erinnert werden.</p>
+      </div>
+      <div class="scp-card">
+        <div class="item-no">SCP-001</div>
+        <span class="badge b-apollyon">Diverse</span>
+        <p>Keine einzelne Akte, sondern ein Sonderfall: Mehrere konkurrierende, sich gegenseitig ausschließende Vorschläge existieren parallel dafür, was „das grundlegendste Geheimnis“ der Foundation ist.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gruppen">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Gruppen von Interesse (GOI)</h2></div>
+    <p class="sec-intro">Die Foundation ist nicht allein: zahlreiche rivalisierende, verbündete oder neutrale Organisationen bevölkern dasselbe Universum.</p>
+
+    <table>
+      <thead><tr><th>Gruppe</th><th>Kurzbeschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Chaos Insurgency</td><td class="dim">Abtrünnige ehemalige Foundation-Mitglieder, die anomale Objekte für eigene Zwecke nutzen statt sie zu verbergen.</td></tr>
+        <tr><td>Global Occult Coalition (GOC)</td><td class="dim">Staatlich legitimierte Organisation, die Anomalien meist zerstört statt sie einzudämmen — deutlich aggressiver als die Foundation.</td></tr>
+        <tr><td>Church of the Broken God</td><td class="dim">Technokultische Gruppierung, die eine Art mechanisches Gottwesen verehrt und anomale Technologie sammelt.</td></tr>
+        <tr><td>Serpent's Hand</td><td class="dim">Lose Gemeinschaft, die anomale Wesen und Orte vor Eindämmung schützen will, statt sie zu kontrollieren.</td></tr>
+        <tr><td>Wanderer's Library</td><td class="dim">Mysteriöse, zwischen Realitäten wandernde Bibliothek mit eigener neutraler Agenda rund um Wissen und Geschichten.</td></tr>
+        <tr><td>Marshall, Carter &amp; Dark</td><td class="dim">Elitäres Handelsunternehmen, das mit anomalen Objekten und Dienstleistungen für eine sehr exklusive Kundschaft handelt.</td></tr>
+        <tr><td>UIU (Unusual Incidents Unit)</td><td class="dim">US-Bundesbehörde, die übernatürliche Vorfälle untersucht und dabei eher an klassische Ermittlungsarbeit erinnert.</td></tr>
+        <tr><td>Sarkicism / Fünfte Kirche</td><td class="dim">Body-Horror-lastige religiöse Bewegungen rund um Fleisch, Verschmelzung und alte, organische Gottheiten.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="taskforces">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Mobile Task Forces (MTF) — Gesamtübersicht</h2></div>
+    <p class="sec-intro">Wichtiger Hinweis vorab: Die MTF-Liste des Wikis wird von der Community geführt, ist ausdrücklich <strong>nicht kanonisch</strong> und umfasst inzwischen weit über 150 Einträge auf mehreren Unterseiten (Alpha–Mu, Nu–Omega, Sonderformen). Sie wird laufend erweitert, verändert und teils widersprüchlich gepflegt (dieselbe Nummer wird gelegentlich doppelt vergeben). Eine wirklich vollständige, für alle Zeit gültige Liste gibt es damit per Definition nicht. Unten findest du eine sehr umfangreiche, nach Bezeichnung sortierte Übersicht der am häufigsten referenzierten und bekanntesten Einheiten aus allen 24 griechischen Buchstabengruppen.</p>
+
+    <table>
+      <thead><tr><th>Bezeichnung</th><th>Codename</th><th>Aufgabe / Besonderheit</th></tr></thead>
+      <tbody>
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">ALPHA</td></tr>
+        <tr><td>Alpha-0</td><td>„The Watchers"</td><td class="dim">Beobachtungs- und Aufsichtseinheit ohne öffentlich bekannte Details.</td></tr>
+        <tr><td>Alpha-1</td><td>„Red Right Hand"</td><td class="dim">Direkt dem O5-Rat unterstellte Spezialeinheit für höchste Geheimhaltungsstufen.</td></tr>
+        <tr><td>Alpha-4</td><td>„Pony Express"</td><td class="dim">Verdeckte Agenten, spezialisiert auf Post- und Paketwege für anomale Sendungen.</td></tr>
+        <tr><td>Alpha-6</td><td>„Game Changers"</td><td class="dim">Spezialeinheit für besonders folgenreiche Einsatzsituationen.</td></tr>
+        <tr><td>Alpha-9</td><td>„Last Hope"</td><td class="dim">Trainiert und führt humanoide SCP-Objekte im Feldeinsatz.</td></tr>
+        <tr><td>Alpha-23</td><td>„Three Silver Swords"</td><td class="dim">Kampforientierte Eliteeinheit.</td></tr>
+        <tr><td>Alpha-45</td><td>„Janitors"</td><td class="dim">Zuständig für Aufräum- und Spurenbeseitigungseinsätze nach Vorfällen.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">BETA</td></tr>
+        <tr><td>Beta-1</td><td>„Cauterizers"</td><td class="dim">Einsatzteam mit Fokus auf schnelle, radikale Schadensbegrenzung.</td></tr>
+        <tr><td>Beta-2</td><td>„Bayou Boys"</td><td class="dim">Regionale Einheit für Feuchtgebiets- und Sumpfeinsätze.</td></tr>
+        <tr><td>Beta-4</td><td>„Castaways"</td><td class="dim">Spezialisiert auf abgelegene Insel- und Küsteneinsätze.</td></tr>
+        <tr><td>Beta-7</td><td>„Maz Hatters"</td><td class="dim">Untersucht realitätsverzerrende und wahnsinnsauslösende Anomalien.</td></tr>
+        <tr><td>Beta-777</td><td>„Hecate's Spear"</td><td class="dim">Auf okkulte und magiebezogene Bedrohungen spezialisierte Einheit.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">GAMMA</td></tr>
+        <tr><td>Gamma-4</td><td>„Blondebeard's Crew" / „Green Stags"</td><td class="dim">Zwei parallel geführte Varianten; erstere für Zero-G/Vakuum-Einsätze.</td></tr>
+        <tr><td>Gamma-5</td><td>„Red Herrings"</td><td class="dim">Streut gezielt Falschinformationen zur Vertuschung anomaler Vorfälle.</td></tr>
+        <tr><td>Gamma-6</td><td>„Deep Feeders"</td><td class="dim">Zuständig für ozean- und tiefseebezogene Anomalien.</td></tr>
+        <tr><td>Gamma-13</td><td>„Asimov's Lawbringers"</td><td class="dim">Spezialisiert auf Anomalien rund um künstliche Intelligenz und Robotik.</td></tr>
+        <tr><td>Gamma-89</td><td>„Rock and a Hard Place"</td><td class="dim">Einsatzteam für geologische und untertägige Zwischenfälle.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">DELTA</td></tr>
+        <tr><td>Delta-1</td><td>„Saint Olga's Reprisal"</td><td class="dim">Kampfeinheit für Vergeltungs- und Rückeroberungseinsätze.</td></tr>
+        <tr><td>Delta-3</td><td>„Solomon's Hand"</td><td class="dim">Für Einsätze mit religiösem oder ritualistischem Hintergrund.</td></tr>
+        <tr><td>Delta-4</td><td>„Minutemen"</td><td class="dim">Schnelle Eingreiftruppe für akute Erstreaktionen.</td></tr>
+        <tr><td>Delta-5</td><td>„Front Runners"</td><td class="dim">Undercover-Agenten in fremden Gruppen von Interesse zur Objektbeschaffung.</td></tr>
+        <tr><td>Delta-14</td><td>„Winter Wonderland"</td><td class="dim">Spezialisiert auf arktische und Kälteanomalien.</td></tr>
+        <tr><td>Delta-45</td><td>„Rolling Thunder"</td><td class="dim">Luftgestützte Unterstützungseinheit für Foundation-Operationen.</td></tr>
+        <tr><td>Delta-82</td><td>„Grave Coppers"</td><td class="dim">Ermittlungseinheit für friedhofs- und bestattungsbezogene Vorfälle.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">EPSILON</td></tr>
+        <tr><td>Epsilon-6</td><td>„Village Idiots"</td><td class="dim">Untersuchung, Eindämmung und Aufräumarbeiten in ländlichen/vorstädtischen Gebieten.</td></tr>
+        <tr><td>Epsilon-7</td><td>„Forget Me Nots"</td><td class="dim">Zuständig für den Einsatz von Amnestika bei Zeugen.</td></tr>
+        <tr><td>Epsilon-9</td><td>„Fire Eaters"</td><td class="dim">Einsatz von Brandwaffen bei Hochtemperatur-Anomalien.</td></tr>
+        <tr><td>Epsilon-11</td><td>„Nine-Tailed Fox"</td><td class="dim">Bekannteste interne Sicherheitseinheit; rückt bei Ausbrüchen und größeren Zwischenfällen aus.</td></tr>
+        <tr><td>Epsilon-13</td><td>„Manifest Destiny"</td><td class="dim">Expansions- und Erkundungseinheit für neue Foundation-Standorte.</td></tr>
+        <tr><td>Epsilon-33</td><td>„Ford Pintos"</td><td class="dim">Fahrzeugbezogene Sondereinheit.</td></tr>
+        <tr><td>Epsilon-98</td><td>„Sun Watcher"</td><td class="dim">Einzelagent auf Dauerposten an Bord einer anomalen Raumstation.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">ZETA</td></tr>
+        <tr><td>Zeta-9</td><td>„Mole Rats"</td><td class="dim">Erkundung und Eindämmung unterirdischer Anomalien mit instabiler Topografie.</td></tr>
+        <tr><td>Zeta-19</td><td>„Lonely Only"</td><td class="dim">Einzelgänger-Einheit aus einer bekannten Vorfallsimulation.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">ETA</td></tr>
+        <tr><td>Eta-4</td><td>„Begone Thoth"</td><td class="dim">Aus veränderten Seevögeln bestehende Aufklärungs- und Kampfeinheit.</td></tr>
+        <tr><td>Eta-5</td><td>„Jäeger Bombers"</td><td class="dim">Schwer bewaffnete Kampfeinheit.</td></tr>
+        <tr><td>Eta-7</td><td>„Creepy Crawlies"</td><td class="dim">Einheit für insekten- bzw. krabbeltierbezogene Anomalien.</td></tr>
+        <tr><td>Eta-10</td><td>„See No Evil"</td><td class="dim">Für Anomalien, die über visuelle Wahrnehmung wirken.</td></tr>
+        <tr><td>Eta-11</td><td>„Savage Beasts"</td><td class="dim">Eindämmung aggressiver, tierähnlicher Anomalien.</td></tr>
+        <tr><td>Eta-13</td><td>„Gulliver's Tourists"</td><td class="dim">Einheit für extreme Größenanomalien.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">THETA</td></tr>
+        <tr><td>Theta-3</td><td>„Silla Dagger"</td><td class="dim">Vorläufereinheit für die Sicherung eines bekannten Objekts in Korea, getarnt als Presseteam.</td></tr>
+        <tr><td>Theta-4</td><td>„Gardeners"</td><td class="dim">Zuständig für pflanzliche und botanische Anomalien.</td></tr>
+        <tr><td>Theta-90</td><td>„Angle Grinders"</td><td class="dim">Technische Spezialeinheit für bauliche Eindämmungsmaßnahmen.</td></tr>
+        <tr><td>Theta-7000</td><td>„Fortunate Sons"</td><td class="dim">Umgang mit Wahrscheinlichkeitskollaps-Ereignissen.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">IOTA</td></tr>
+        <tr><td>Iota-10</td><td>„Damn Feds"</td><td class="dim">Undercover-Ermittler, getarnt als Bundesbehörde.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">KAPPA</td></tr>
+        <tr><td>Kappa-10</td><td>„Skynet"</td><td class="dim">Vorläufige Einheit gegen digitale/„cyberanomale" Bedrohungen mittels KI-Agenten.</td></tr>
+        <tr><td>Kappa-14</td><td>—</td><td class="dim">Beobachtet und untersucht eine bekannte Wanderzirkus-Gruppierung.</td></tr>
+        <tr><td>Kappa-43</td><td>—</td><td class="dim">Verfolgt und sichert anomale Medieninhalte.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">LAMBDA</td></tr>
+        <tr><td>Lambda-4</td><td>„Birdwatchers"</td><td class="dim">Beobachtung und Eindämmung vogelbezogener Anomalien.</td></tr>
+        <tr><td>Lambda-5</td><td>„White Rabbits"</td><td class="dim">Verfolgt Anomalien, die sich zwischen Orten/Realitäten „verstecken".</td></tr>
+        <tr><td>Lambda-12</td><td>„Pest Control"</td><td class="dim">Kleinere Schädlings- bzw. Kleinlebewesen-Anomalien.</td></tr>
+        <tr><td>Lambda-14</td><td>„One Star Reviewers"</td><td class="dim">Verdeckte Ermittler im Umfeld von Konsum- und Bewertungsplattformen.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">MU</td></tr>
+        <tr><td>Mu-3</td><td>„Highest Bidders"</td><td class="dim">Tarnt sich als Käufer bei Auktionen anomaler Objekte.</td></tr>
+        <tr><td>Mu-4</td><td>„Debuggers"</td><td class="dim">Softwarenahe Spezialeinheit für digitale Anomalien.</td></tr>
+        <tr><td>Mu-5</td><td>„Pro Gamers"</td><td class="dim">Untersucht Anomalien rund um Videospiele.</td></tr>
+        <tr><td>Mu-13</td><td>„Ghostbusters"</td><td class="dim">Für spuk- und geisterbezogene Phänomene.</td></tr>
+        <tr><td>Mod-0</td><td>„Characteristic Eigenspaces"</td><td class="dim">Hochspezialisierte, mathematisch-abstrakte Sondereinheit.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">NU</td></tr>
+        <tr><td>Nu-7</td><td>„Hammer Down"</td><td class="dim">Bataillonsstarke Streitmacht mit gepanzerten Fahrzeugen für großflächige Ausbrüche.</td></tr>
+        <tr><td>Nu-15</td><td>„Stormtroopers"</td><td class="dim">Schwer bewaffnete Kampfeinheit für Frontaleinsätze.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">PI</td></tr>
+        <tr><td>Pi-1</td><td>„City Slickers"</td><td class="dim">Für urbane Anomalien und Stadteinsätze.</td></tr>
+        <tr><td>Pi-3</td><td>„The Dollar Bills"</td><td class="dim">Untersucht finanz- und geldbezogene Anomalien.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">RHO</td></tr>
+        <tr><td>Rho-1</td><td>„The Professors"</td><td class="dim">Wissenschaftlich orientierte Beratungs- und Analyseeinheit.</td></tr>
+        <tr><td>Rho-9</td><td>„Technical Support"</td><td class="dim">Technische Unterstützung bei komplexen Eindämmungen.</td></tr>
+        <tr><td>Rho-19</td><td>„Cythereans"</td><td class="dim">Aufbau von Foundation-Außenposten auf der Venus und Erkundung dortiger Anomalien.</td></tr>
+        <tr><td>Rho-57</td><td>„House Breakers"</td><td class="dim">Für Einbruchs- und Zugangsanomalien in Gebäuden.</td></tr>
+        <tr><td>Rho-71</td><td>„Origami Toads"</td><td class="dim">Kleine, spezialisierte Untersuchungseinheit.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">SIGMA</td></tr>
+        <tr><td>Sigma-3</td><td>„Bibliographers"</td><td class="dim">Katalogisierung und Analyse anomaler Texte und Schriften.</td></tr>
+        <tr><td>Sigma-66</td><td>„Sixteen Tons"</td><td class="dim">Für bergbau- und schwerindustriebezogene Vorfälle.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">TAU</td></tr>
+        <tr><td>Tau-1</td><td>—</td><td class="dim">Allgemeine Eingreifeinheit ohne öffentlich näher beschriebene Spezialisierung.</td></tr>
+        <tr><td>Tau-5</td><td>„Samsara"</td><td class="dim">Cyborg-Truppe gegen magische, psionische und thaumaturgische Bedrohungen.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">PSI</td></tr>
+        <tr><td>Psi-7</td><td>„Home Improvement"</td><td class="dim">Für Anomalien in Wohngebäuden und Haushaltsgegenständen.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">OMICRON</td></tr>
+        <tr><td>Omicron-2</td><td>„Skippers with Flippers"</td><td class="dim">Für maritime Anomalien mit aquatischen Trägern.</td></tr>
+        <tr><td>Omicron-7</td><td>„Orkin"</td><td class="dim">Kammerjäger-artige Einheit für Kleinlebewesen-Befall.</td></tr>
+        <tr><td>Omicron-Rho</td><td>„The Dream Team"</td><td class="dim">Für traum- und bewusstseinsbezogene Anomalien.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">OMEGA</td></tr>
+        <tr><td>Omega-1</td><td>„Law's Left Hand"</td><td class="dim">Ergänzt Alpha-1 bei besonders sensiblen Durchsetzungsaufgaben.</td></tr>
+        <tr><td>Omega-7</td><td>—</td><td class="dim">Historische Vorläufereinheit für den Feldeinsatz humanoider Objekte, später von Alpha-9 abgelöst.</td></tr>
+        <tr><td>Omega-12</td><td>„Achilles Heels"</td><td class="dim">Sucht gezielt nach Schwachstellen extrem widerstandsfähiger Anomalien.</td></tr>
+
+        <tr><td colspan="3" class="mono" style="background:var(--surface-2); color:var(--red-bright); letter-spacing:.1em; font-size:.72rem;">SONDERBEZEICHNUNGEN</td></tr>
+        <tr><td>D-12</td><td>„Mud Slingers"</td><td class="dim">Ausschließlich aus Klasse-D-Personal zusammengesetzte Testeinheit.</td></tr>
+        <tr><td>Stigma-9</td><td>„Evolved from Naturally Occurring Gears, Levers and Pulleys"</td><td class="dim">Bewusst überzogen benannte Scherz-/Nischeneinheit der Community.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="disclaimer" style="margin-top:24px;">
+      <strong>Zur Vollständigkeit:</strong> Die offizielle Sammel-Hub-Seite des Wikis listet deutlich mehr Einträge, als hier sinnvoll darstellbar sind, und wird als „nicht kanonisch, primär als Werkzeug für Autor:innen“ geführt — nicht als feststehendes Organigramm. Für die aktuellste und wirklich vollständige Fassung lohnt sich ein Blick auf die Original-Hub-Seite <a class="license-link" href="https://scp-wiki.wikidot.com/task-forces" target="_blank" rel="noopener">scp-wiki.wikidot.com/task-forces</a>.
+    </div>
+  </section>
+
+  <section id="andere-einheiten">
+    <div class="sec-head"><span class="sec-num">06</span><h2>Andere Einheiten &amp; Organisationsformen</h2></div>
+    <p class="sec-intro">Neben den Mobile Task Forces existieren innerhalb der Foundation — und bei rivalisierenden Gruppen — weitere wiederkehrende Einheitentypen.</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Site-Sicherheitspersonal</h3>
+        <p>Reguläre, ortsgebundene Wachmannschaften einzelner Standorte, zuständig für alltägliche Sicherung und Erstreaktion vor Eintreffen einer MTF.</p>
+      </div>
+      <div class="card">
+        <h3>Klasse-D-Personal</h3>
+        <p>Testpersonal, meist aus verurteilten Straftätern rekrutiert, das für riskante Experimente mit anomalen Objekten eingesetzt und turnusmäßig ausgetauscht wird.</p>
+      </div>
+      <div class="card">
+        <h3>Forschungsteams</h3>
+        <p>Standortgebundene Wissenschaftler:innen-Gruppen, die einzelne Objekte dauerhaft betreuen, analysieren und Eindämmungsprotokolle weiterentwickeln.</p>
+      </div>
+      <div class="card">
+        <h3>Overwatch-Kommando</h3>
+        <p>Koordinierende Führungsebene zwischen O5-Rat und operativen Kräften, zuständig für Freigaben und Priorisierung von Einsätzen.</p>
+      </div>
+      <div class="card">
+        <h3>Chaos-Insurgency-Zellen</h3>
+        <p>Dezentral organisierte, meist kleine Kampf- und Beschaffungseinheiten der abtrünnigen Splittergruppe, die unabhängig von einer zentralen Befehlskette agieren.</p>
+      </div>
+      <div class="card">
+        <h3>GOC-Einsatzgruppen</h3>
+        <p>Militärisch strukturierte Einheiten der Global Occult Coalition, die im Gegensatz zu Foundation-MTFs meist auf Zerstörung statt Eindämmung ausgelegt sind.</p>
+      </div>
+      <div class="card">
+        <h3>UIU-Ermittlerteams</h3>
+        <p>Kleine, zivil auftretende Ermittlungseinheiten der US-Bundesbehörde UIU, die eher klassische Kriminalfall-Methodik als militärische Taktik nutzen.</p>
+      </div>
+      <div class="card">
+        <h3>Serpent's-Hand-Zirkel</h3>
+        <p>Lose, nicht-hierarchische Gruppen innerhalb der Serpent's Hand, die anomale Wesen und Orte im Feld vor dem Zugriff der Foundation verstecken.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="abteilungen">
+    <div class="sec-head"><span class="sec-num">07</span><h2>Abteilungen der Foundation</h2></div>
+    <p class="sec-intro">Wie bei den Task Forces gilt auch hier: Die Abteilungsliste ist eine offene, von der Community gepflegte Übersicht, kein festes Organigramm. Manche Abteilungen tauchen nur in einzelnen Geschichten auf, andere sind über viele Akten hinweg fest etabliert. Gruppiert nach Verwaltung, operativen Kernabteilungen und spezialisierten Nischenabteilungen.</p>
+
+    <h3 class="stamp-font" style="color:var(--red-bright); font-size:.95rem; letter-spacing:.05em; margin:0 0 14px;">Führung &amp; Verwaltung</h3>
+    <div class="grid grid-3">
+      <div class="card"><h3>O5-Rat / Overwatch Command</h3><p>Oberste Entscheidungsebene mit Level-5-Zugriff auf die gesamte Datenbank.</p></div>
+      <div class="card"><h3>Ethikkomitee</h3><p>Prüft und genehmigt moralisch heikle Eindämmungs- und Forschungsmaßnahmen.</p></div>
+      <div class="card"><h3>Site-Direktor:innen-Rat</h3><p>Koordiniert die Leiter:innen einzelner Standorte untereinander.</p></div>
+      <div class="card"><h3>RAISA</h3><p>Verwaltet Datenbankzugriff, Aktenpflege und Informationssicherheit foundation-intern.</p></div>
+      <div class="card"><h3>Verwaltungsabteilung (AD)</h3><p>Allgemeiner Betrieb, Personalverwaltung und Finanzen der Foundation.</p></div>
+    </div>
+
+    <h3 class="stamp-font" style="color:var(--red-bright); font-size:.95rem; letter-spacing:.05em; margin:32px 0 14px;">Operative Kernabteilungen</h3>
+    <div class="grid grid-3">
+      <div class="card"><h3>Abteilung für Außenbeziehungen (DEA)</h3><p>Pflegt Tarnidentitäten und die öffentliche Reputation der Foundation gegenüber Staaten und Institutionen.</p></div>
+      <div class="card"><h3>Technische Abteilung (ETSD)</h3><p>Entwickelt Technik und bauliche Sicherheitsmaßnahmen für Eindämmung und Standorte.</p></div>
+      <div class="card"><h3>Nachrichtendienst (IA)</h3><p>Sammelt und wertet Informationen über Bedrohungen, GOIs und potenzielle neue Anomalien aus.</p></div>
+      <div class="card"><h3>Interne Sicherheitsabteilung (ISD)</h3><p>Überwacht foundation-eigenes Personal auf Loyalität, Verstöße und Sicherheitsrisiken.</p></div>
+      <div class="card"><h3>Logistikabteilung</h3><p>Organisiert Transport von Objekten, Personal und Material zwischen Standorten.</p></div>
+      <div class="card"><h3>Fertigungsabteilung (ManD)</h3><p>Produziert Spezialausrüstung wie Scranton-Realitätsanker; verwaltet auch einen Großteil des Klasse-D-Personals.</p></div>
+      <div class="card"><h3>Medizinische Abteilung</h3><p>Versorgt Personal und Testsubjekte, behandelt anomalie-bedingte Verletzungen und Zustände.</p></div>
+      <div class="card"><h3>Sicherheitsabteilung</h3><p>Bewacht Sperrzonen, Klasse-D-Bereiche und begleitet Tests vor Ort an den Standorten.</p></div>
+      <div class="card"><h3>Wissenschaftliche Abteilung (SciD)</h3><p>Führt Erforschung, Interaktion und Tests mit Anomalien innerhalb der Sicherheitsperimeter durch.</p></div>
+      <div class="card"><h3>Rapid Response Team (RRT)</h3><p>Schnell verlegbare Ergänzungseinheit für akute Zwischenfälle unterhalb der MTF-Schwelle.</p></div>
+      <div class="card"><h3>Emergent Threat Tactical Response Authority</h3><p>Koordiniert großflächige, weltweite Reaktionen auf neu auftretende anomale Bedrohungen.</p></div>
+    </div>
+
+    <h3 class="stamp-font" style="color:var(--red-bright); font-size:.95rem; letter-spacing:.05em; margin:32px 0 14px;">Spezialisierte Nischenabteilungen</h3>
+    <div class="grid grid-3">
+      <div class="card"><h3>Alchemie-Abteilung</h3><p>Erforscht Anomalien jenseits rationaler Naturwissenschaft, verbunden mit ätherischen Kräften.</p></div>
+      <div class="card"><h3>Antimemetik-Abteilung</h3><p>Erforscht und dämmt Entitäten und Konzepte ein, die sich aktiv der Erinnerung entziehen.</p></div>
+      <div class="card"><h3>Abteilung für anomale Waffenentwicklung</h3><p>Entwickelt Waffensysteme auf Basis anomaler Prinzipien und Materialien.</p></div>
+      <div class="card"><h3>KI-Anwendungsabteilung (AIAD)</h3><p>Entwickelt und betreibt künstliche, teils foundation-eigene Intelligenzen (AICs).</p></div>
+      <div class="card"><h3>Archivabteilung</h3><p>Verwaltet historische Akten, stillgelegte Fälle und Langzeitarchive.</p></div>
+      <div class="card"><h3>Kryptozoologie-Abteilung</h3><p>Zuständig für anomale, kryptidähnliche Lebewesen.</p></div>
+      <div class="card"><h3>Entomologie-Abteilung</h3><p>Spezialisiert auf insektenbezogene Anomalien.</p></div>
+      <div class="card"><h3>Abteilung für Mathematik</h3><p>Untersucht Anomalien, die auf mathematischen oder logischen Paradoxien beruhen.</p></div>
+      <div class="card"><h3>Abteilung für Fehlkommunikation</h3><p>Zuständig für infohazardöse, memetische und sprachliche Anomalien.</p></div>
+      <div class="card"><h3>Abteilung für Mythologie &amp; Folklore</h3><p>Erforscht mythologische, antike und spirituelle Anomalien.</p></div>
+      <div class="card"><h3>Department of Other</h3><p>Auffangbecken für Objekte, die in kein anderes Ressort passen — bewusst augenzwinkernd geführt.</p></div>
+      <div class="card"><h3>Pataphysik-Abteilung</h3><p>Untersucht, inwiefern Realität selbst „erzählerisch" konstruiert ist, an der Schnittstelle von Physik und Literaturtheorie.</p></div>
+      <div class="card"><h3>Abteilung für Beschaffung &amp; Liquidation</h3><p>Erwirbt oder vernichtet gezielt anomale Gegenstände.</p></div>
+      <div class="card"><h3>Abteilung für Fegefeuer-Räume</h3><p>Zuständig für Zwischenräume und liminale, nicht-euklidische Orte.</p></div>
+      <div class="card"><h3>Surrealistik-Abteilung</h3><p>Erforscht abstrakte, infohazardöse Anomalien mit unkonventionellen Methoden.</p></div>
+      <div class="card"><h3>Abteilung für Taktische Theologie</h3><p>Beschäftigt sich mit theologischen, dämonischen und göttlichen Anomalien.</p></div>
+      <div class="card"><h3>Telekommunikations-Überwachungsstelle</h3><p>Überwacht Kommunikationswege auf anomale oder informationsgefährliche Inhalte.</p></div>
+      <div class="card"><h3>Abteilung für temporale Anomalien</h3><p>Zuständig für zeitbezogene Phänomene und Zeitparadoxien.</p></div>
+      <div class="card"><h3>Abteilungen für Anthropologie, Archäologie &amp; Astrophysik</h3><p>Fachspezifische Forschungsabteilungen für entsprechend geartete Anomalien.</p></div>
+    </div>
+
+    <div class="disclaimer" style="margin-top:28px;">
+      <strong>Zur Vollständigkeit:</strong> Auch hier gilt: Die Original-Hub-Seite listet noch mehr, teils sehr nischenhafte Abteilungen (bis hin zu bewusst ironischen Einträgen). Vollständige, aktuelle Fassung unter <a class="license-link" href="https://scp-wiki.wikidot.com/departments" target="_blank" rel="noopener">scp-wiki.wikidot.com/departments</a>.
+    </div>
+  </section>
+
+  <section id="kanon">
+    <div class="sec-head"><span class="sec-num">08</span><h2>Kanon, Tales &amp; Erzählformen</h2></div>
+    <p class="sec-intro">Das Wiki ist kein einzelner, geschlossener Handlungsstrang, sondern ein loses Geflecht aus Formaten und teils widersprüchlichen Kanons.</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Akten (SCP-Artikel)</h3>
+        <p>Formal-nüchtern verfasste „Dokumente“ im Stil echter Akten: Beschreibung, Eindämmung, Vorfallprotokolle, Interviews, teils mit geschwärzten Passagen.</p>
+      </div>
+      <div class="card">
+        <h3>Tales</h3>
+        <p>Klassisch erzählte Kurzgeschichten, die Charaktere, Ereignisse oder die Innensicht der Foundation ausbauen — freier im Ton als die Akten selbst.</p>
+      </div>
+      <div class="card">
+        <h3>GOI-Formate</h3>
+        <p>Geschichten und Dokumente aus Sicht anderer Gruppen von Interesse statt der Foundation selbst.</p>
+      </div>
+      <div class="card">
+        <h3>Kanons</h3>
+        <p>Offiziell anerkannte, in sich konsistente Erzählstränge (z. B. rund um bestimmte Charaktere oder Standorte), die parallel zum losen „offenen“ Hauptkanon existieren und sich teils widersprechen dürfen.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;">Ein wiederkehrendes Stilmittel ist das <strong>Antimemetikon</strong>: Konzepte und Wesen, die sich aktiv der Erinnerung, dem Bewusstsein oder sogar dem Erzählen selbst entziehen — Leser:innen „vergessen“ sie im Rahmen der Fiktion regelrecht wieder.</p>
+  </section>
+
+  <section id="geschichte">
+    <div class="sec-head"><span class="sec-num">09</span><h2>Reale Entstehungsgeschichte</h2></div>
+    <p class="sec-intro">Wie aus einem einzelnen Forumspost ein globales Gemeinschaftsprojekt wurde.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2007</div>
+        <p>Der ursprüngliche SCP-173-Beitrag entsteht als Bild-Kreativtext im Forum „Something Awful“ und verbreitet sich später im Imageboard 4chan.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2008</div>
+        <p>Aus dem wachsenden Interesse entsteht ein eigenes Wiki, um weitere Objektakten in ähnlichem Format zu sammeln und zu organisieren.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2010er</div>
+        <p>Etablierung fester Formate (Tales, GOI-Formate, eigene Kanons), Aufbau einer Moderations- und Bewertungsstruktur sowie erster fremdsprachiger Ableger.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Laufend</div>
+        <p>Das Projekt wächst kontinuierlich weiter, mit aktiver internationaler Community, regelmäßigen Wettbewerben und stetig erweiterten Klassifizierungssystemen.</p>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Lizenz &amp; Urheberschaft:</strong> Alle Inhalte des SCP-Wikis stehen unter einer Creative-Commons-Lizenz (CC BY-SA) und werden von einer offenen, unabhängigen Autor:innen-Community verfasst — die Foundation ist kein Unternehmen und steht in keiner Verbindung zu einem bestimmten Studio oder Verlag. Aktuelle Originalquellen und die vollständige Artikeldatenbank finden sich auf <a class="license-link" href="https://scp-wiki.wikidot.com" target="_blank" rel="noopener">scp-wiki.wikidot.com</a>.
+    </div>
+  </section>
+
+  <section id="medien">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Ableger, Spiele &amp; Medien</h2></div>
+    <p class="sec-intro">Das Universum ist längst über das Wiki selbst hinausgewachsen.</p>
+
+    <div class="grid grid-3">
+      <div class="card"><h3>SCP – Containment Breach</h3><p>Bekanntes Fan-Horrorspiel, in dem Spieler:innen einen Ausbruch in einer Foundation-Einrichtung überleben müssen.</p></div>
+      <div class="card"><h3>SCP: Secret Laboratory</h3><p>Multiplayer-Spiel mit asymmetrischen Rollen zwischen Personal, Testsubjekten und entkommenen Anomalien.</p></div>
+      <div class="card"><h3>Kurzfilme &amp; Fanproduktionen</h3><p>Zahlreiche unabhängig produzierte Kurzfilme, Animationen und Let's-Plays rund um einzelne Akten.</p></div>
+      <div class="card"><h3>Podcasts &amp; Hörspiele</h3><p>Vorlese- und Audiodrama-Formate, die einzelne Akten und Tales vertonen.</p></div>
+      <div class="card"><h3>Internationale Wikis</h3><p>Eigenständige, teils inhaltlich abweichende Ableger in u. a. Polnisch, Russisch, Chinesisch, Japanisch, Französisch und Deutsch.</p></div>
+      <div class="card"><h3>Merch &amp; Community-Events</h3><p>Fanartikel, Conventions und wiederkehrende Schreibwettbewerbe innerhalb der Community.</p></div>
+    </div>
+  </section>
+
+  <section id="weiterfuehrend" style="border-bottom:none;">
+    <div class="sec-head"><span class="sec-num">+</span><h2>Weiterführende Akten</h2></div>
+    <p class="sec-intro">Zwei ergänzende Dateien im selben Format, verlinkt aus dieser Übersicht.</p>
+    <div class="grid grid-2">
+      <a href="scp-foundation-akten-archiv.html" style="text-decoration:none;">
+        <div class="card">
+          <h3>→ Akten-Archiv</h3>
+          <p>Deutlich erweiterte Liste bekannter SCP-Objekte, geordnet nach Objektklasse, mit ausführlicheren Kurzbeschreibungen.</p>
+        </div>
+      </a>
+      <a href="scp-foundation-quellen.html" style="text-decoration:none;">
+        <div class="card">
+          <h3>→ Quellen &amp; weiterführende Links</h3>
+          <p>Offizielle Wiki-Links, Lizenzhinweise, internationale Ableger und Empfehlungen zum Weiterlesen.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  ERSTELLT ALS UNABHÄNGIGE FAN-REFERENZ · KEINE OFFIZIELLE FOUNDATION-PUBLIKATION · ORIGINALINHALTE: SCP-WIKI-COMMUNITY (CC BY-SA)
+</footer>
+
+<script>
+  document.querySelectorAll('.redacted').forEach(function(el){
+    function toggle(){ el.classList.toggle('revealed'); }
+    el.addEventListener('click', toggle);
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+  });
+</script>
+
+</body>
+</html>
