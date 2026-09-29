@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundation Site Registry — Interne Datenbank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d09;
+  --bg-panel:#14170f;
+  --bg-panel-2:#1b1f14;
+  --ink:#dcd8c8;
+  --ink-dim:#8d9280;
+  --amber:#e8a33d;
+  --amber-dim:#8a642a;
+  --cyan:#5ad1c9;
+  --danger:#b3261e;
+  --line:rgba(220,216,200,0.14);
+  --mono:'JetBrains Mono',monospace;
+  --serif:'Source Serif 4',serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, rgba(90,209,201,0.05), transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(232,163,61,0.05), transparent 45%),
+    var(--bg);
+  color:var(--ink);
+  font-family:var(--serif);
+  line-height:1.6;
+}
+::selection{background:var(--amber);color:#14170f;}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,#0e100b 0%, rgba(14,16,11,0.94) 100%);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(6px);
+}
+.topbar-inner{
+  max-width:1280px;margin:0 auto;padding:10px 24px;
+  display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+}
+.brand{
+  font-family:var(--mono);font-weight:800;letter-spacing:.14em;
+  font-size:13px;color:var(--amber);text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+.clearance-widget{
+  margin-left:auto;display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+}
+.clearance-widget label{letter-spacing:.08em;text-transform:uppercase;}
+.clearance-track{position:relative;width:190px;}
+input[type=range]{
+  -webkit-appearance:none;width:190px;height:4px;background:var(--line);border-radius:2px;outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:3px;
+  background:var(--amber);border:2px solid #14170f;cursor:pointer;
+  box-shadow:0 0 10px rgba(232,163,61,.6);
+}
+input[type=range]::-moz-range-thumb{
+  width:16px;height:16px;border-radius:3px;background:var(--amber);border:2px solid #14170f;cursor:pointer;
+}
+.clearance-level-badge{
+  font-family:var(--mono);font-weight:700;font-size:12px;
+  padding:3px 9px;border-radius:2px;border:1px solid var(--amber-dim);color:var(--amber);
+  min-width:112px;text-align:center;letter-spacing:.05em;
+}
+
+/* ---------- hero ---------- */
+.hero{
+  max-width:1280px;margin:0 auto;padding:56px 24px 40px;
+  display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;
+  border-bottom:1px solid var(--line);
+}
+.hero-stamp{
+  justify-self:end;align-self:start;
+  border:2px solid var(--danger);color:var(--danger);
+  font-family:var(--mono);font-weight:800;font-size:12px;letter-spacing:.18em;
+  padding:9px 14px;transform:rotate(4deg);text-transform:uppercase;
+  opacity:.85;user-select:none;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--cyan);margin:0 0 14px;
+}
+h1.title{
+  font-family:var(--mono);font-weight:800;font-size:clamp(32px,5vw,58px);
+  margin:0 0 18px;color:var(--ink);letter-spacing:-.01em;line-height:1.04;
+}
+h1.title span{color:var(--amber);}
+.hero p.lead{max-width:56ch;color:var(--ink-dim);font-size:16.5px;margin:0 0 18px;}
+.hero-meta{display:flex;gap:26px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);}
+.hero-meta b{color:var(--ink);display:block;font-size:20px;font-weight:700;}
+
+/* ---------- layout ---------- */
+.layout{max-width:1280px;margin:0 auto;padding:36px 24px 100px;display:grid;grid-template-columns:250px 1fr;gap:34px;}
+@media (max-width:880px){.layout{grid-template-columns:1fr;} .hero{grid-template-columns:1fr;} .hero-stamp{justify-self:start;}}
+
+.nav-panel{position:sticky;top:74px;align-self:start;}
+.nav-title{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ink-dim);text-transform:uppercase;margin-bottom:10px;}
+.site-nav{list-style:none;margin:0;padding:0;border-left:1px solid var(--line);}
+.site-nav button{
+  display:block;width:100%;text-align:left;background:none;border:none;color:var(--ink-dim);
+  font-family:var(--mono);font-size:12.5px;padding:9px 14px;cursor:pointer;
+  border-left:2px solid transparent;margin-left:-1px;transition:all .15s;
+}
+.site-nav button b{color:var(--ink);display:block;font-size:13.5px;margin-bottom:1px;}
+.site-nav button:hover{background:var(--bg-panel);color:var(--ink);}
+.site-nav button.active{border-left-color:var(--amber);background:var(--bg-panel);color:var(--amber);}
+.site-nav button.active b{color:var(--amber);}
+.legend{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-dim);}
+.legend div{display:flex;align-items:center;gap:8px;margin:5px 0;}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none;}
+
+/* ---------- site dossier ---------- */
+.dossier{display:none;animation:fadein .35s ease;}
+.dossier.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.dossier-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px;
+}
+.dossier-head h2{font-family:var(--mono);font-size:26px;margin:0 0 6px;color:var(--ink);}
+.dossier-head .sub{color:var(--ink-dim);font-family:var(--mono);font-size:12px;letter-spacing:.04em;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{
+  font-family:var(--mono);font-size:10.5px;padding:4px 9px;border-radius:2px;letter-spacing:.05em;
+  border:1px solid var(--line);color:var(--ink-dim);text-transform:uppercase;
+}
+.tag.hot{border-color:var(--danger);color:var(--danger);}
+.tag.cool{border-color:var(--cyan);color:var(--cyan);}
+
+.grid-2{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;}
+@media (max-width:960px){.grid-2{grid-template-columns:1fr;}}
+
+.panel{background:var(--bg-panel);border:1px solid var(--line);border-radius:3px;padding:20px 22px;margin-bottom:22px;}
+.panel h3{
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);
+  margin:0 0 12px;display:flex;align-items:center;gap:8px;
+}
+.panel h3::before{content:'§';color:var(--ink-dim);}
+.panel p{margin:0 0 12px;font-size:15px;color:var(--ink);}
+.panel p:last-child{margin-bottom:0;}
+
+/* redaction */
+.classified{
+  background:#1a1c15;color:#1a1c15;border-radius:1px;cursor:help;padding:0 2px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);transition:color .18s, background .18s;
+  position:relative;
+}
+.classified.revealed{background:transparent;color:var(--cyan);}
+.classified:not(.revealed):hover{animation:jitter .18s linear 2;}
+@keyframes jitter{0%{transform:translateX(0);}25%{transform:translateX(-1px);}75%{transform:translateX(1px);}100%{transform:translateX(0);}}
+.classified:not(.revealed):hover::after{
+  content:'ZUGRIFF VERWEIGERT — CLEARANCE ' attr(data-level) ' ERFORDERLICH';
+  position:absolute;left:0;bottom:120%;white-space:nowrap;background:var(--danger);color:#fff;
+  font-family:var(--mono);font-size:9.5px;padding:3px 6px;border-radius:2px;letter-spacing:.04em;z-index:5;
+}
+
+/* incident log */
+.log-entry{border-left:2px solid var(--line);padding:8px 0 8px 14px;margin-bottom:2px;}
+.log-entry b{font-family:var(--mono);color:var(--amber);font-size:12px;display:block;margin-bottom:3px;}
+.log-entry p{font-size:14px;color:var(--ink-dim);margin:0;}
+
+/* sector table */
+.sector-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.sector-table th{
+  text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-dim);border-bottom:1px solid var(--line);padding:6px 8px 8px 0;
+}
+.sector-table td{padding:9px 8px 9px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+.sector-table tr:last-child td{border-bottom:none;}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;}
+
+/* floor plan */
+.plan-wrap{position:relative;background:#0d0f0a;border:1px solid var(--line);border-radius:3px;padding:14px;}
+.plan-wrap svg{width:100%;height:auto;display:block;}
+.room{stroke:rgba(220,216,200,0.3);stroke-width:1;cursor:pointer;transition:filter .15s, stroke .15s;}
+.room:hover{stroke:var(--cyan);stroke-width:1.6;filter:brightness(1.35);}
+.room-label{font-family:'JetBrains Mono',monospace;font-size:6.4px;fill:var(--ink);pointer-events:none;letter-spacing:.02em;}
+.room-code{font-family:'JetBrains Mono',monospace;font-size:5px;fill:var(--ink-dim);pointer-events:none;}
+.corridor{fill:#181c12;stroke:rgba(220,216,200,.08);}
+.plan-caption{font-family:var(--mono);font-size:10px;color:var(--ink-dim);margin-top:10px;display:flex;justify-content:space-between;}
+.tooltip-box{
+  position:absolute;pointer-events:none;background:#101208;border:1px solid var(--amber-dim);
+  color:var(--ink);font-family:var(--mono);font-size:11px;padding:9px 12px;border-radius:2px;
+  max-width:250px;line-height:1.45;opacity:0;transition:opacity .12s;z-index:20;box-shadow:0 8px 22px rgba(0,0,0,.5);
+}
+.tooltip-box b{color:var(--amber);display:block;font-size:11.5px;margin-bottom:3px;}
+.tooltip-box.show{opacity:1;}
+
+footer{border-top:1px solid var(--line);padding:30px 24px 60px;max-width:1280px;margin:0 auto;}
+footer p{font-family:var(--mono);font-size:11px;color:var(--ink-dim);max-width:70ch;}
+footer .disclaimer{color:var(--ink-dim);opacity:.75;margin-top:14px;font-size:10.5px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span> Foundation Site Registry</div>
+    <div class="clearance-widget">
+      <label for="clearance">Clearance</label>
+      <input type="range" id="clearance" min="1" max="5" value="1" step="1">
+      <span class="clearance-level-badge" id="clearanceBadge">LEVEL 1 — SICHERHEIT</span>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div>
+    <p class="eyebrow">Interne Datenbank · Nur für autorisiertes Personal</p>
+    <h1 class="title">Standort<span>register</span> der Foundation</h1>
+    <p class="lead">Diese Datenbank enthält Grundrisse, Sektorbeschreibungen und Vorfallprotokolle ausgewählter Foundation-Standorte. Der Detailgrad der angezeigten Informationen richtet sich nach Ihrer eingestellten Zugriffsstufe — heben Sie die Stufe rechts oben an, um geschwärzte Abschnitte einzusehen.</p>
+    <div class="hero-meta">
+      <div><b>06</b>Standorte erfasst</div>
+      <div><b>41</b>Sektoren dokumentiert</div>
+      <div><b>∞</b>Verantwortung</div>
+    </div>
+  </div>
+  <div class="hero-stamp">⚠ Streng vertraulich</div>
+</section>
+
+<div class="layout">
+  <nav class="nav-panel">
+    <div class="nav-title">Standortverzeichnis</div>
+    <ul class="site-nav" id="siteNav"></ul>
+    <div class="legend">
+      <div><i style="background:#3d5a80"></i> Verwaltung / Sicherheit</div>
+      <div><i style="background:#7a4b8a"></i> Forschung &amp; Labore</div>
+      <div><i style="background:#8a3a3a"></i> Anomalie-Containment</div>
+      <div><i style="background:#3f7a4f"></i> Medizin / Bio</div>
+      <div><i style="background:#6b6440"></i> Logistik / Lager</div>
+      <div><i style="background:#222420"></i> Zugang gesperrt</div>
+    </div>
+  </nav>
+
+  <main id="dossierRoot"></main>
+</div>
+
+<footer>
+  <p>Dies ist ein fiktives Fan-Projekt im Stil der SCP Foundation. Standorte, Grundrisse, Personendaten und Vorfallprotokolle sind vollständig erfunden und dienen ausschließlich der kreativen Darstellung — sie sind keine Wiedergabe realer Wiki-Artikel.</p>
+  <p class="disclaimer">Secure. Contain. Protect. — Diese Seite steht in keiner offiziellen Verbindung zur SCP Foundation Wiki-Community oder deren Rechteinhabern.</p>
+</footer>
+
+<div class="tooltip-box" id="tooltip"></div>
+
+<script>
+/* ============================================================
+   DATENMODELL — alle Inhalte sind frei erfunden (Fan-Fiction)
+   ============================================================ */
+const TYPE_COLORS = {
+  admin:'#3d5a80', research:'#7a4b8a', containment:'#8a3a3a',
+  medical:'#3f7a4f', storage:'#6b6440', locked:'#222420'
+};
+
+const SITES = [
+{
+  id:'site-19', code:'Site-19', name:'Hauptarchiv & Schweres Containment',
+  region:'Nordamerika, Region [DATEN GESCHWÄRZT]', clearanceReq:4,
+  tags:['Größter Standort','Level-5-Zugang','Reaktornah'],
+  overview:`Site-19 ist der älteste durchgehend betriebene Großstandort der Foundation und dient als zentrales Archiv für physische Dokumentation sowie als Containment-Einrichtung für Anomalien der Klassen Euclid und Keter mit hohem Personalrisiko. Die Anlage erstreckt sich über sieben unterirdische Ebenen und eine oberirdische Tarnfassade, die gegenüber der lokalen Bevölkerung als stillgelegtes Bergbau-Verwaltungsgebäude geführt wird.`,
+  history:`Die Grundsteinlegung erfolgte in den frühen 1970er-Jahren, nachdem ein Vorgängerstandort nach einem <span class="classified" data-level="4">Containment-Durchbruch der Klasse Keter, bei dem 22 Mitarbeiter permanent transformiert wurden</span> aufgegeben werden musste. Site-19 wurde bewusst über einer stillgelegten Kalisalzmine errichtet, deren Stollensystem heute als zusätzliche Pufferzone zwischen den Containment-Ebenen dient.`,
+  oversight:'Oversight-Ausschuss Nr. 3 („Industrie & Ressourcen“)',
+  director:'Standortdirektorin <span class="classified" data-level="3">M. Ferreira</span>',
+  personnel:'≈1.140 aktive Mitarbeiter, davon 260 Forschungspersonal, 410 Sicherheitskräfte',
+  sectors:[
+    {name:'Sektor A — Verwaltung & Empfang',type:'admin',desc:'Tarnbüros, Personalregistrierung, Besucherschleuse mit dreistufiger Identitätsprüfung.'},
+    {name:'Sektor C — Schweres Containment',type:'containment',desc:'18 Hochsicherheits-Zellen für Klasse-Euclid-Objekte, jede mit unabhängiger Energie- und Belüftungsversorgung.'},
+    {name:'Sektor D — Forschungslabore',type:'research',desc:'Analyse- und Testräume, getrennt nach thermischen, biologischen und kognitohazardären Risikoklassen.'},
+    {name:'Sektor F — Medizinische Abteilung',type:'medical',desc:'Notfallversorgung, Amnestika-Ausgabe, Langzeitbeobachtung exponierten Personals.'},
+    {name:'Sektor L — Logistik & Lager',type:'storage',desc:'Verbrauchsmaterial, Ausrüstung der mobilen Einsatzkräfte, Notfall-Evakuierungsdepots.'},
+    {name:'Sektor K — Kalisalzstollen (gesperrt)',type:'locked',desc:'<span class="classified" data-level="5">Zugang ausschließlich für Personal mit Sonderfreigabe O5. Zweck laut aktueller Klassifizierung nicht auflistbar.</span>'}
+  ],
+  incidents:[
+    {date:'Vorfall 19-114', text:'Kurzzeitiger Stromausfall in Sektor C infolge eines Erdrutsches im angrenzenden Stollensystem. Reservegeneratoren übernahmen nach 4,2 Sekunden.'},
+    {date:'Vorfall 19-206', text:'<span class="classified" data-level="4">Teilweiser Containment-Verlust einer akustischen Anomalie während einer geplanten Wartung. Betäubungsgas in Zelle C-11 vorzeitig ausgelöst, keine Personalschäden.</span>'},
+    {date:'Vorfall 19-233', text:'Fehlalarm im Bereich der Besucherschleuse durch defekten Metalldetektor, keine anomalen Auswirkungen.'}
+  ],
+  rooms:[
+    {x:10,y:10,w:90,h:50,label:'Empfang',code:'A-01',type:'admin'},
+    {x:110,y:10,w:70,h:50,label:'Personal',code:'A-04',type:'admin',
+      tip:'Identitätsprüfung, biometrische Erfassung und Ausgabe temporärer Zugangschips für Besucher und Neuzugänge.'},
+    {x:190,y:10,w:60,h:50,label:'Sicherheit',code:'A-07',type:'admin',
+      tip:'Zentraler Überwachungsraum für Sektor A, verbunden mit dem Kamerasystem der gesamten oberirdischen Tarnfassade.'},
+    {x:10,y:80,w:60,h:150,label:'C-Zellen 1–6',code:'C-01/06',type:'containment',
+      tip:'Sechs Standard-Euclid-Zellen mit Doppelschleusen und unabhängiger Energieversorgung. Aktuell 4 von 6 belegt.'},
+    {x:80,y:80,w:60,h:150,label:'C-Zellen 7–12',code:'C-07/12',type:'containment',
+      tip:'Verstärkte Zellen für Anomalien mit kognitohazardärem Potenzial. Personal benötigt Blendschutzausrüstung.'},
+    {x:150,y:80,w:60,h:150,label:'C-Zellen 13–18',code:'C-13/18',type:'containment',
+      tip:'Hochsicherheitszellen mit seismischer Isolation aufgrund der Nähe zum Kalisalzstollen.'},
+    {x:220,y:80,w:60,h:70,label:'Beobachtung',code:'C-OBS',type:'containment',
+      tip:'Zentrale Beobachtungsstation mit direkter Sichtlinie auf alle 18 Containment-Zellen des Sektors.'},
+    {x:220,y:160,w:60,h:70,label:'Notfallschleuse',code:'C-EX',type:'containment',
+      tip:'Druckabgedichtete Fluchtschleuse, ausgelegt für die gleichzeitige Evakuierung von bis zu 40 Mitarbeitern.'},
+    {x:10,y:250,w:130,h:60,label:'Labore D1–D4',code:'D-01/04',type:'research',
+      tip:'Getrennte Analyseräume für thermische, biologische und akustische Testreihen unter kontrollierten Bedingungen.'},
+    {x:150,y:250,w:130,h:60,label:'Kognito-Labor',code:'D-09',type:'research',
+      tip:'Speziell abgeschirmter Testraum für Objekte mit visuellem oder auditivem Wirkmechanismus, Einwegspiegel-Beobachtung.'},
+    {x:10,y:320,w:100,h:50,label:'Medizin',code:'F-01',type:'medical',
+      tip:'Notaufnahme und Erstversorgung, direkt an Sektor C angebunden für schnelle Evakuierung exponierten Personals.'},
+    {x:120,y:320,w:100,h:50,label:'Amnestika',code:'F-05',type:'medical',
+      tip:'Kontrollierte Ausgabestelle für Klasse-A- bis Klasse-C-Amnestika, protokollpflichtige Entnahme.'},
+    {x:230,y:250,w:50,h:120,label:'Lager',code:'L-02',type:'storage',
+      tip:'Zentrallager für Verbrauchsmaterial und Ausrüstung der stationierten mobilen Einsatzkräfte.'},
+    {x:10,y:380,w:270,h:40,label:'Kalisalzstollen — gesperrt',code:'K-00',type:'locked',
+      tip:'Zugang nur mit O5-Sonderfreigabe. Funktion laut aktueller Klassifizierung nicht auflistbar.'}
+  ],
+  planW:300, planH:430
+},
+{
+  id:'site-17', code:'Site-17', name:'Humanoiden-Unterbringung & Verhaltensforschung',
+  region:'Westeuropa, ländliches Gebiet', clearanceReq:3,
+  tags:['Humanoide Anomalien','Kooperationsprogramm'],
+  overview:`Site-17 ist auf die langfristige Unterbringung kooperativer sowie teilkooperativer humanoider Anomalien spezialisiert. Im Gegensatz zu klassischen Containment-Standorten ist die Anlage stärker auf Wohnkomfort und Verhaltenstherapie ausgelegt, um die Zusammenarbeit betreuter Subjekte mit Foundation-Personal zu fördern.`,
+  history:`Ursprünglich als landwirtschaftliches Gut getarnt, wurde die Anlage in den 1990er-Jahren nach dem Erfolg mehrerer <span class="classified" data-level="3">Reintegrationsprogramme für teilkooperative Subjekte</span> auf ihren heutigen Umfang erweitert. Ein Großteil der oberirdischen Gebäude bleibt bewusst unauffällig gehalten.`,
+  oversight:'Oversight-Ausschuss Nr. 7 („Ethik & Verhaltensforschung“)',
+  director:'Standortdirektor <span class="classified" data-level="3">H. Voss</span>',
+  personnel:'≈480 aktive Mitarbeiter, davon 140 Betreuungs- und Therapiepersonal',
+  sectors:[
+    {name:'Sektor W — Wohntrakt',type:'containment',desc:'Individuell eingerichtete Wohneinheiten für kooperative humanoide Subjekte mit abgestuften Freiheitsgraden.'},
+    {name:'Sektor T — Therapie & Verhalten',type:'research',desc:'Gesprächsräume, Verhaltensbeobachtung und Konditionierungsprogramme unter psychologischer Aufsicht.'},
+    {name:'Sektor V — Verwaltung',type:'admin',desc:'Tarnbetrieb der landwirtschaftlichen Fassade, Besucherlogistik, Personalunterkünfte.'},
+    {name:'Sektor M — Medizin',type:'medical',desc:'Spezialisiert auf nicht-menschliche Physiologie und artfremde Biochemie betreuter Subjekte.'},
+    {name:'Sektor R — Rückzugsbereich',type:'locked',desc:'<span class="classified" data-level="4">Isolationsflügel für Subjekte nach Kooperationsverlust. Zutritt nur mit begleitendem Sicherheitsteam.</span>'}
+  ],
+  incidents:[
+    {date:'Vorfall 17-041', text:'Kurzzeitiger Vertrauensbruch eines betreuten Subjekts während einer Therapiesitzung, deeskaliert ohne Zwischenfall.'},
+    {date:'Vorfall 17-088', text:'<span class="classified" data-level="3">Ein teilkooperatives Subjekt verweigerte über 72 Stunden die Kommunikation nach einem Vorfall im Wohntrakt. Ursache inzwischen behoben.</span>'},
+    {date:'Vorfall 17-112', text:'Routinemäßiger Fehlalarm der Zaunsensorik durch Wildwechsel im Außenbereich.'}
+  ],
+  rooms:[
+    {x:10,y:10,w:80,h:50,label:'Verwaltung',code:'V-01',type:'admin',tip:'Tarnbetrieb der landwirtschaftlichen Fassade sowie Personalunterkünfte für nicht eingeweihtes Hilfspersonal.'},
+    {x:100,y:10,w:80,h:50,label:'Besucher',code:'V-04',type:'admin',tip:'Empfang für autorisierte externe Berater und Familienangehörige kooperativer Subjekte.'},
+    {x:10,y:70,w:60,h:60,label:'Wohn 1',code:'W-01',type:'containment',tip:'Einzelwohneinheit mit Wohnzimmer, Küche und persönlichem Rückzugsraum für ein hochkooperatives Subjekt.'},
+    {x:80,y:70,w:60,h:60,label:'Wohn 2',code:'W-02',type:'containment',tip:'Gemeinschaftlich genutzte Wohneinheit für zwei sozial verträgliche Subjekte mit ähnlichem Bedürfnisprofil.'},
+    {x:150,y:70,w:60,h:60,label:'Wohn 3',code:'W-03',type:'containment',tip:'Wohneinheit mit erweiterten Umweltkontrollen für ein Subjekt mit atypischen klimatischen Anforderungen.'},
+    {x:220,y:70,w:60,h:60,label:'Gemeinschaft',code:'W-CM',type:'containment',tip:'Gemeinschaftsraum für begleitete soziale Interaktion mehrerer Subjekte unter Aufsicht.'},
+    {x:10,y:150,w:100,h:60,label:'Therapieraum A',code:'T-01',type:'research',tip:'Gesprächsraum für Einzeltherapie mit Einwegspiegel-Beobachtung durch das psychologische Team.'},
+    {x:120,y:150,w:100,h:60,label:'Konditionierung',code:'T-05',type:'research',tip:'Kontrollierter Raum für abgestufte Belohnungs- und Kooperationsprogramme.'},
+    {x:230,y:150,w:50,h:60,label:'Beobachtung',code:'T-OBS',type:'research',tip:'Zentrale Beobachtungsstation mit Blick auf alle Therapieräume des Sektors.'},
+    {x:10,y:220,w:120,h:50,label:'Medizin',code:'M-01',type:'medical',tip:'Auf nicht-menschliche Physiologie spezialisierte Behandlungseinheit mit anpassbarer Ausstattung.'},
+    {x:140,y:220,w:140,h:50,label:'Rückzugsbereich — gesperrt',code:'R-00',type:'locked',tip:'Isolationsflügel für Subjekte nach Kooperationsverlust. Zutritt nur mit begleitendem Sicherheitsteam.'}
+  ],
+  planW:290, planH:280
+},
+{
+  id:'area-14', code:'Area-14', name:'Wüstenanlage — Physikalische Anomalien',
+  region:'Südwesten, ariden Region', clearanceReq:2,
+  tags:['Physik & Ballistik','Außenanlage','Geringe Personaldichte'],
+  overview:`Area-14 ist eine weitläufige, überwiegend oberirdische Anlage in einer abgelegenen Wüstenregion, spezialisiert auf physikalische, ballistische und großräumige Anomalien, deren Containment umfangreiche Freiflächen erfordert. Die geringe Bevölkerungsdichte der Umgebung erleichtert die Tarnung als militärisches Sperrgebiet.`,
+  history:`Die Anlage entstand aus einem <span class="classified" data-level="2">bestehenden Testgelände für konventionelle Waffensysteme</span>, das nach Übernahme durch die Foundation stillschweigend umgewidmet wurde. Die Tarnung als aktives Sperrgebiet wird bis heute durch simulierten Truppenverkehr aufrechterhalten.`,
+  oversight:'Oversight-Ausschuss Nr. 3 („Industrie & Ressourcen“)',
+  director:'Standortdirektor <span class="classified" data-level="2">P. Alaoui</span>',
+  personnel:'≈210 aktive Mitarbeiter, überwiegend technisches und ballistisches Fachpersonal',
+  sectors:[
+    {name:'Sektor B — Ballistik-Testfeld',type:'containment',desc:'Offene Freifläche mit gepanzerten Beobachtungsbunkern für Objekte mit kinetischer Wirkung.'},
+    {name:'Sektor G — Geophysikalisches Labor',type:'research',desc:'Untersuchung gravitativer und geologischer Anomalien mittels seismischer Sensorfelder.'},
+    {name:'Sektor H — Hangar & Technik',type:'storage',desc:'Wartung von Trägerfahrzeugen und schwerer Containment-Ausrüstung.'},
+    {name:'Sektor Q — Quartiere',type:'admin',desc:'Unterkünfte und Versorgung des Personals bei mehrtägigen Außeneinsätzen.'},
+    {name:'Sektor U — Unterirdisches Depot',type:'locked',desc:'<span class="classified" data-level="3">Lagerung großvolumiger Objekte unterhalb der sichtbaren Anlage. Zufahrt getarnt als Munitionsbunker.</span>'}
+  ],
+  incidents:[
+    {date:'Vorfall 14-019', text:'Sandsturm beschädigte temporär die äußere Sensorik des Testfelds, keine Beeinträchtigung der Containment-Integrität.'},
+    {date:'Vorfall 14-052', text:'<span class="classified" data-level="2">Unerwartete Reichweitensteigerung eines ballistischen Testobjekts, Sicherheitsradius vorsorglich um 400 Meter erweitert.</span>'},
+    {date:'Vorfall 14-077', text:'Ziviler Fotograf näherte sich dem Außenzaun, durch Standard-Tarnprotokoll und Amnestikum abgewiesen.'}
+  ],
+  rooms:[
+    {x:10,y:10,w:170,h:110,label:'Ballistik-Testfeld',code:'B-00',type:'containment',tip:'Weitläufige Freifläche mit versenkbaren Zielstrukturen und gepanzerten Beobachtungsbunkern an drei Seiten.'},
+    {x:190,y:10,w:80,h:50,label:'Bunker Ost',code:'B-B1',type:'containment',tip:'Gepanzerter Beobachtungsbunker mit direkter Sichtlinie auf das gesamte Testfeld.'},
+    {x:190,y:70,w:80,h:50,label:'Kontrolle',code:'B-CT',type:'containment',tip:'Fernsteuerungszentrale für automatisierte Testabläufe und Notabschaltung.'},
+    {x:10,y:130,w:110,h:60,label:'Geo-Labor',code:'G-01',type:'research',tip:'Auswertungsstation für seismische und gravitative Messdaten der umliegenden Sensorfelder.'},
+    {x:130,y:130,w:70,h:60,label:'Sensorraum',code:'G-04',type:'research',tip:'Zentrale Datenerfassung der im Wüstenboden verlegten Sensorarrays.'},
+    {x:210,y:130,w:60,h:60,label:'Hangar',code:'H-01',type:'storage',tip:'Wartungshalle für Trägerfahrzeuge und Transportgeräte für schwere Containment-Module.'},
+    {x:10,y:200,w:90,h:50,label:'Quartiere',code:'Q-01',type:'admin',tip:'Unterkünfte für Personal bei mehrtägigen Außeneinsätzen im Testgelände.'},
+    {x:110,y:200,w:80,h:50,label:'Versorgung',code:'Q-05',type:'admin',tip:'Kantine und Versorgungslager für das stationierte technische Personal.'},
+    {x:200,y:200,w:70,h:50,label:'Depot — gesperrt',code:'U-00',type:'locked',tip:'Unterirdisches Depot, getarnt als Munitionsbunker. Zutritt nur mit gesonderter Freigabe.'}
+  ],
+  planW:280, planH:260
+},
+{
+  id:'site-06', code:'Site-06', name:'Maritimes Containment & Tiefsee-Forschung',
+  region:'Küstenregion, teils Offshore-Plattform', clearanceReq:3,
+  tags:['Aquatische Anomalien','Offshore-Betrieb'],
+  overview:`Site-06 kombiniert eine küstennahe Verwaltungseinrichtung mit einer getarnten Offshore-Plattform, die dem Containment aquatischer und tiefseebezogener Anomalien dient. Zwischen beiden Teilstandorten verkehrt ausschließlich Foundation-eigenes Schiffs- und Tauchpersonal.`,
+  history:`Die Offshore-Komponente wurde in den 1980er-Jahren aus einer stillgelegten <span class="classified" data-level="3">Bohrplattform errichtet, nachdem in der Region wiederholt anomale Meeresströmungen dokumentiert wurden</span>. Die küstennahe Verwaltung dient primär der logistischen Anbindung.`,
+  oversight:'Oversight-Ausschuss Nr. 3 („Industrie & Ressourcen“)',
+  director:'Standortdirektorin <span class="classified" data-level="3">L. Bergström</span>',
+  personnel:'≈365 aktive Mitarbeiter, davon 90 zertifizierte Tiefseetaucher',
+  sectors:[
+    {name:'Sektor P — Plattformkern',type:'containment',desc:'Druckgesicherte Containment-Module für aquatische Anomalien in variabler Wassertiefe.'},
+    {name:'Sektor N — Nassdockbereich',type:'research',desc:'Tauchschleusen und Unterwasserlabore für Feldbeobachtung ohne vollständige Entnahme.'},
+    {name:'Sektor K — Küstenverwaltung',type:'admin',desc:'Logistikzentrale, Schiffsanbindung und Personaltransfer zur Offshore-Plattform.'},
+    {name:'Sektor M — Medizin & Dekompression',type:'medical',desc:'Druckkammern und Behandlung tauchbedingter sowie anomaler physiologischer Zwischenfälle.'},
+    {name:'Sektor T — Tiefendepot',type:'locked',desc:'<span class="classified" data-level="4">Verankerung großvolumiger Objekte am Meeresgrund unterhalb der Plattform. Koordinaten nicht auflistbar.</span>'}
+  ],
+  incidents:[
+    {date:'Vorfall 06-027', text:'Starke Unterströmung verzögerte einen geplanten Tauchgang zur Sektor-P-Wartung um 14 Stunden.'},
+    {date:'Vorfall 06-063', text:'<span class="classified" data-level="3">Kurzzeitiger Druckabfall in einem Containment-Modul durch Materialermüdung, betroffenes Objekt zeigte keine Reaktion.</span>'},
+    {date:'Vorfall 06-081', text:'Ziviles Fischereischiff näherte sich der Sperrzone, durch Küstenwache-Tarnprotokoll umgeleitet.'}
+  ],
+  rooms:[
+    {x:10,y:10,w:90,h:60,label:'Küstenverwaltung',code:'K-01',type:'admin',tip:'Logistikzentrale für den Personal- und Materialtransfer zwischen Küste und Offshore-Plattform.'},
+    {x:110,y:10,w:70,h:60,label:'Anlegestelle',code:'K-05',type:'admin',tip:'Schiffsanleger für Foundation-eigene Transportboote, getarnt als Küstenwache-Station.'},
+    {x:10,y:80,w:170,h:20,label:'Verbindungsdamm',code:'—',type:'admin',tip:'Befestigter Übergang zwischen küstennaher Verwaltung und der Offshore-Plattform.'},
+    {x:10,y:110,w:80,h:60,label:'Plattformkern A',code:'P-01',type:'containment',tip:'Druckgesichertes Containment-Modul für aquatische Anomalien in geringer Wassertiefe.'},
+    {x:100,y:110,w:80,h:60,label:'Plattformkern B',code:'P-04',type:'containment',tip:'Erweitertes Containment-Modul mit variabler Drucksteuerung für Tiefsee-Anomalien.'},
+    {x:10,y:180,w:80,h:50,label:'Nassdock',code:'N-01',type:'research',tip:'Tauchschleuse und Unterwasserlabor für Feldbeobachtung ohne vollständige Entnahme des Objekts.'},
+    {x:100,y:180,w:80,h:50,label:'Medizin/Dekompression',code:'M-01',type:'medical',tip:'Druckkammern zur Behandlung tauchbedingter Zwischenfälle sowie anomaler physiologischer Reaktionen.'},
+    {x:10,y:240,w:170,h:40,label:'Tiefendepot — gesperrt',code:'T-00',type:'locked',tip:'Verankerung großvolumiger Objekte am Meeresgrund unterhalb der Plattform. Koordinaten nicht auflistbar.'}
+  ],
+  planW:190, planH:290
+},
+{
+  id:'site-88', code:'Site-88', name:'Urbane Tarneinrichtung — Informationskontrolle',
+  region:'Großstadt, unterirdisch unter zivilem Gebäudekomplex', clearanceReq:4,
+  tags:['Städtisches Umfeld','Informationssicherheit'],
+  overview:`Site-88 liegt vollständig unterirdisch unter einem regulär genutzten Bürokomplex im Zentrum einer Großstadt. Der Standort ist auf Informationskontrolle, digitale Anomalien sowie die schnelle Reaktion auf urbane Vorfälle spezialisiert. Die zivile Nutzung der Gebäude darüber bleibt vollständig unberührt.`,
+  history:`Site-88 entstand aus der Notwendigkeit, in dicht besiedelten Gebieten <span class="classified" data-level="4">innerhalb von unter 20 Minuten reaktionsfähig zu sein, nachdem ein früherer Vorfall durch verzögerte Anfahrtszeiten eskalierte</span>. Der Bau erfolgte offiziell im Rahmen einer U-Bahn-Erweiterung.`,
+  oversight:'Oversight-Ausschuss Nr. 9 („Information & Öffentlichkeit“)',
+  director:'Standortdirektor <span class="classified" data-level="4">R. Adeyemi</span>',
+  personnel:'≈300 aktive Mitarbeiter, davon 130 Einsatzkräfte für urbane Reaktion',
+  sectors:[
+    {name:'Sektor I — Informationskontrolle',type:'research',desc:'Überwachung digitaler Anomalien, Medienintervention und Desinformationsabwehr.'},
+    {name:'Sektor E — Einsatzzentrale',type:'admin',desc:'Koordination mobiler Einsatzkräfte für schnelle urbane Reaktionen.'},
+    {name:'Sektor Z — Zugangstunnel',type:'storage',desc:'Getarnte Tunnelverbindungen zum städtischen U-Bahn-Netz für unauffälligen Personaltransfer.'},
+    {name:'Sektor C — Kleincontainment',type:'containment',desc:'Kompakte Zellen für Objekte geringer physischer Größe mit hohem Informationsrisiko.'},
+    {name:'Sektor X — Archiv der Amnestika-Protokolle',type:'locked',desc:'<span class="classified" data-level="5">Vollständige Protokollierung sämtlicher urbaner Amnestika-Einsätze der letzten Dekade. Zugriff ausschließlich für O5-Personal.</span>'}
+  ],
+  incidents:[
+    {date:'Vorfall 88-004', text:'Kurzzeitiger Serverausfall in Sektor I während eines geplanten Software-Updates, Backup-Systeme übernahmen ohne Datenverlust.'},
+    {date:'Vorfall 88-019', text:'<span class="classified" data-level="4">Ein digitales Kognitohazard verbreitete sich für 6 Minuten über ein lokales Nachrichtenportal, vollständig zurückgezogen und Nutzer amnestiert.</span>'},
+    {date:'Vorfall 88-031', text:'Bauarbeiten der zivilen U-Bahn-Erweiterung näherten sich einem Zugangstunnel, Bauplanung diskret umgeleitet.'}
+  ],
+  rooms:[
+    {x:10,y:10,w:90,h:50,label:'Einsatzzentrale',code:'E-01',type:'admin',tip:'Koordinationsraum für mobile Einsatzkräfte, ausgelegt auf Reaktionszeiten unter 20 Minuten im Stadtgebiet.'},
+    {x:110,y:10,w:70,h:50,label:'Lagezentrum',code:'E-04',type:'admin',tip:'Echtzeitüberwachung städtischer Sensor- und Kamerafeeds zur frühzeitigen Vorfallerkennung.'},
+    {x:10,y:70,w:80,h:60,label:'Info-Kontrolle',code:'I-01',type:'research',tip:'Überwachung digitaler Anomalien sowie aktive Medienintervention gegen anomale Informationsverbreitung.'},
+    {x:100,y:70,w:80,h:60,label:'Analyse-Server',code:'I-05',type:'research',tip:'Serverraum für automatisierte Erkennung kognitohazardärer Inhalte in öffentlichen Netzwerken.'},
+    {x:190,y:70,w:60,h:60,label:'C-Zellen',code:'C-01/04',type:'containment',tip:'Vier kompakte Zellen für Objekte geringer physischer Größe mit hohem informationellem Risiko.'},
+    {x:10,y:140,w:110,h:40,label:'Zugangstunnel A',code:'Z-01',type:'storage',tip:'Getarnte Tunnelverbindung zum städtischen U-Bahn-Netz für unauffälligen Personaltransfer.'},
+    {x:130,y:140,w:120,h:40,label:'Zugangstunnel B',code:'Z-02',type:'storage',tip:'Zweiter Zugangstunnel, ausschließlich für Notfallevakuierung freigegeben.'},
+    {x:10,y:190,w:110,h:40,label:'Archiv X — gesperrt',code:'X-00',type:'locked',tip:'Vollständige Protokollierung sämtlicher urbaner Amnestika-Einsätze. Zugriff ausschließlich für O5-Personal.'}
+  ],
+  planW:260, planH:240
+},
+{
+  id:'site-01', code:'Site-01', name:'Sitz des Rats der O5 — Zentralverwaltung',
+  region:'Standort nicht auflistbar', clearanceReq:5,
+  tags:['O5-Ratssitz','Höchste Geheimhaltung'],
+  overview:`Site-01 ist der administrative Kernstandort der gesamten Organisation und beherbergt den Ratssaal der O5-Führungsebene. Der genaue geografische Standort ist selbst für die meisten Mitarbeiter mit hoher Freigabe nicht bekannt; sämtliche Anreisen erfolgen über wechselnde, nicht vorhersagbare Transferpunkte.`,
+  history:`<span class="classified" data-level="5">Über die Entstehungsgeschichte von Site-01 existieren keine für dieses Register freigegebenen Aufzeichnungen. Selbst Standortdirektoren anderer Einrichtungen verfügen über keinen dokumentierten Zugang zu dieser Information.</span>`,
+  oversight:'Direkt dem Rat der O5 unterstellt',
+  director:'<span class="classified" data-level="5">Information nicht auflistbar</span>',
+  personnel:'Personalstärke nicht auflistbar',
+  sectors:[
+    {name:'Sektor R — Ratssaal',type:'locked',desc:'<span class="classified" data-level="5">Tagungsort der O5-Führungsebene. Weitere Angaben nicht auflistbar.</span>'},
+    {name:'Sektor V — Verwaltungskern',type:'admin',desc:'Koordination sämtlicher Standortdirektionen und Oversight-Ausschüsse weltweit.'},
+    {name:'Sektor S — Sicherheitsring',type:'containment',desc:'Mehrstufiger Sicherheitsperimeter mit voneinander unabhängigen Zugangskontrollen.'},
+    {name:'Sektor A — Archiv der Archive',type:'research',desc:'Zentrales Metaarchiv mit Verweisen auf sämtliche Standortdokumentationen der Organisation.'}
+  ],
+  incidents:[
+    {date:'Vorfall 01-000', text:'<span class="classified" data-level="5">Sämtliche Vorfallprotokolle dieses Standorts unterliegen einer Geheimhaltungsstufe oberhalb dieses Registers.</span>'}
+  ],
+  rooms:[
+    {x:10,y:10,w:250,h:60,label:'Sicherheitsring — mehrstufig',code:'S-00',type:'containment',tip:'Mehrstufiger Sicherheitsperimeter mit voneinander unabhängigen, redundanten Zugangskontrollen.'},
+    {x:10,y:90,w:110,h:70,label:'Verwaltungskern',code:'V-01',type:'admin',tip:'Koordination sämtlicher Standortdirektionen und Oversight-Ausschüsse weltweit von zentraler Stelle aus.'},
+    {x:140,y:90,w:120,h:70,label:'Archiv der Archive',type:'research',code:'A-00',tip:'Zentrales Metaarchiv mit Querverweisen auf sämtliche Standortdokumentationen der gesamten Organisation.'},
+    {x:60,y:180,w:140,h:70,label:'Ratssaal — gesperrt',code:'R-00',type:'locked',tip:'Tagungsort der O5-Führungsebene. Weitere Angaben zu diesem Raum sind nicht auflistbar.'}
+  ],
+  planW:270, planH:260
+}
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const nav = document.getElementById('siteNav');
+const root = document.getElementById('dossierRoot');
+const tooltip = document.getElementById('tooltip');
+let clearance = 1;
+
+function clearanceLabel(n){
+  return ['LEVEL 1 — SICHERHEIT','LEVEL 2 — VERTRAULICH','LEVEL 3 — GEHEIM','LEVEL 4 — STRENG GEHEIM','LEVEL 5 — O5-RAT'][n-1];
+}
+
+SITES.forEach((site, i)=>{
+  const li = document.createElement('li');
+  const btn = document.createElement('button');
+  btn.innerHTML = `<b>${site.code}</b>${site.name}`;
+  btn.dataset.idx = i;
+  btn.addEventListener('click', ()=> showSite(i));
+  li.appendChild(btn);
+  nav.appendChild(li);
+
+  const d = document.createElement('div');
+  d.className = 'dossier';
+  d.id = 'd-'+site.id;
+  d.innerHTML = renderSite(site);
+  root.appendChild(d);
+});
+
+function renderSite(s){
+  const svg = buildFloorPlan(s);
+  return `
+  <div class="dossier-head">
+    <div>
+      <h2>${s.code} <span style="color:var(--ink-dim);font-weight:400;font-size:16px;">— ${s.name}</span></h2>
+      <div class="sub">${s.region} · Erforderliche Basiszugriffsstufe: ${s.clearanceReq}</div>
+    </div>
+    <div class="tag-row">
+      ${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+      <span class="tag hot">Clearance ${s.clearanceReq}+</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="panel">
+        <h3>Übersicht</h3>
+        <p>${s.overview}</p>
+      </div>
+      <div class="panel">
+        <h3>Entstehung</h3>
+        <p>${s.history}</p>
+      </div>
+      <div class="panel">
+        <h3>Grundriss</h3>
+        <div class="plan-wrap">
+          ${svg}
+        </div>
+        <div class="plan-caption"><span>Maßstab schematisch · nicht navigationsfähig</span><span>Klick auf Räume für Details</span></div>
+      </div>
+      <div class="panel">
+        <h3>Sektoren</h3>
+        <table class="sector-table">
+          <thead><tr><th>Sektor</th><th>Beschreibung</th></tr></thead>
+          <tbody>
+          ${s.sectors.map(sec=>`<tr><td><span class="sw" style="background:${TYPE_COLORS[sec.type]}"></span>${sec.name}</td><td>${sec.desc}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="panel">
+        <h3>Verwaltung</h3>
+        <p><b style="color:var(--ink-dim);font-family:var(--mono);font-size:11px;">OVERSIGHT</b><br>${s.oversight}</p>
+        <p><b style="color:var(--ink-dim);font-family:var(--mono);font-size:11px;">DIREKTION</b><br>${s.director}</p>
+        <p><b style="color:var(--ink-dim);font-family:var(--mono);font-size:11px;">PERSONAL</b><br>${s.personnel}</p>
+      </div>
+      <div class="panel">
+        <h3>Vorfallprotokoll</h3>
+        ${s.incidents.map(inc=>`<div class="log-entry"><b>${inc.date}</b><p>${inc.text}</p></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildFloorPlan(s){
+  const rooms = s.rooms.map(r=>{
+    const color = TYPE_COLORS[r.type] || '#333';
+    return `<g class="room-g" data-tip="${(r.tip||r.label).replace(/"/g,'&quot;')}" data-name="${r.label}">
+      <rect class="room" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" fill-opacity="0.55"/>
+      <text class="room-label" x="${r.x+5}" y="${r.y+14}">${r.label}</text>
+      <text class="room-code" x="${r.x+5}" y="${r.y+r.h-5}">${r.code||''}</text>
+    </g>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${s.planW} ${s.planH}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="${s.planW}" height="${s.planH}" fill="none" stroke="rgba(220,216,200,0.08)"/>
+    ${rooms}
+  </svg>`;
+}
+
+function showSite(i){
+  document.querySelectorAll('.dossier').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.site-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('d-'+SITES[i].id).classList.add('active');
+  document.querySelector(`.site-nav button[data-idx="${i}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  attachTooltips();
+  applyClearance();
+}
+
+function attachTooltips(){
+  document.querySelectorAll('.room-g').forEach(g=>{
+    g.onmousemove = (e)=>{
+      tooltip.innerHTML = `<b>${g.dataset.name}</b>${g.dataset.tip}`;
+      tooltip.style.left = (e.pageX+16)+'px';
+      tooltip.style.top = (e.pageY+16)+'px';
+      tooltip.classList.add('show');
+    };
+    g.onmouseleave = ()=> tooltip.classList.remove('show');
+  });
+}
+
+function applyClearance(){
+  document.querySelectorAll('.classified').forEach(el=>{
+    const need = parseInt(el.dataset.level,10);
+    el.classList.toggle('revealed', clearance >= need);
+  });
+}
+
+document.getElementById('clearance').addEventListener('input', (e)=>{
+  clearance = parseInt(e.target.value,10);
+  document.getElementById('clearanceBadge').textContent = clearanceLabel(clearance);
+  applyClearance();
+});
+
+/* init */
+document.getElementById('clearanceBadge').textContent = clearanceLabel(clearance);
+showSite(0);
+</script>
+</body>
+</html>

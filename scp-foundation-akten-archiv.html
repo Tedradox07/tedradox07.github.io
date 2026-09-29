@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP FOUNDATION — Erweitertes Akten-Archiv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c0c; --surface:#161513; --surface-2:#1e1c19;
+    --bone:#e8e3d6; --muted:#8a8478; --rule:#3a352e;
+    --red:#a91d1d; --red-bright:#d13030; --amber:#c99a2e; --green:#4c7a4c;
+    --keter-glow: rgba(169,29,29,0.35);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:radial-gradient(ellipse at top, #141311 0%, var(--bg) 55%), var(--bg); color:var(--bone); font-family:'Source Serif 4', Georgia, serif; line-height:1.65;}
+  ::selection{background:var(--red); color:#fff;}
+  a{color:inherit;}
+  .classbar{position:sticky; top:0; z-index:50; background:var(--red); color:#fff; font-family:'Courier Prime', monospace; font-weight:700; letter-spacing:.12em; font-size:.72rem; text-align:center; padding:6px 8px; text-transform:uppercase; border-bottom:2px solid #000;}
+  .backlink{display:block; text-align:center; padding:10px; font-family:'JetBrains Mono', monospace; font-size:.75rem; color:var(--muted); border-bottom:1px solid var(--rule); text-decoration:none;}
+  .backlink:hover{color:var(--bone);}
+  main{max-width:980px; margin:0 auto; padding:50px 24px 100px;}
+  h1{font-family:'Courier Prime', monospace; font-size:clamp(2rem,6vw,3.2rem); margin:0 0 14px;}
+  h1 span{color:var(--red-bright);}
+  .sub{color:var(--muted); max-width:640px; margin-bottom:40px;}
+  h2{font-family:'Courier Prime', monospace; font-size:1.3rem; margin:48px 0 6px; color:var(--red-bright); letter-spacing:.03em;}
+  .class-note{color:var(--muted); font-size:.88rem; margin:0 0 22px;}
+  .grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(230px,1fr));}
+  .scp-card{background:linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%); border:1px solid var(--rule); padding:20px;}
+  .scp-card .item-no{font-family:'Courier Prime', monospace; font-size:1.25rem;}
+  .scp-card p{font-size:.88rem; color:var(--muted); margin:8px 0 0;}
+  .badge{display:inline-block; font-family:'JetBrains Mono', monospace; font-size:.66rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:3px 9px; border:1px solid currentColor; margin-top:8px;}
+  .b-safe{color:var(--green);} .b-euclid{color:var(--amber);} .b-keter{color:var(--red-bright);}
+  .keter-card{box-shadow:0 0 0 1px var(--red), 0 0 26px -6px var(--keter-glow);}
+  .disclaimer{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--red); padding:18px 22px; font-size:.85rem; color:var(--muted); margin:36px 0;}
+  .disclaimer strong{color:var(--bone);}
+  a.license-link{color:var(--red-bright); text-decoration:underline;}
+  footer{max-width:980px; margin:0 auto; padding:20px 24px 80px; font-family:'JetBrains Mono', monospace; font-size:.72rem; color:var(--muted); text-align:center;}
+</style>
+</head>
+<body>
+<div class="classbar">▲ CLASSIFIED — ANHANG ZUR HAUPTAKTE — NUR ZU REFERENZZWECKEN ▲</div>
+<a class="backlink" href="scp-foundation.html">← Zurück zur Hauptübersicht</a>
+
+<main>
+  <h1>ERWEITERTES <span>AKTEN-ARCHIV</span></h1>
+  <p class="sub">Eine deutlich größere Auswahl bekannter und einflussreicher SCP-Objekte, ergänzend zur Kernübersicht in der Hauptakte. Auch dies bleibt eine Auswahl — bei über 8.000 aktiven Objekten im Hauptkanon ist keine Liste je vollständig.</p>
+
+  <h2>Safe-Klasse</h2>
+  <p class="class-note">Leicht einzudämmen — sagt nichts über die Gefährlichkeit im direkten Umgang aus.</p>
+  <div class="grid">
+    <div class="scp-card"><div class="item-no">SCP-914</div><span class="badge b-safe">Safe</span><p>Mechanische Präzisionsmaschine, die hineingelegte Gegenstände je nach Einstellung „gröber" oder „feiner" umformt — mit teils unvorhersehbaren Ergebnissen.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-1048</div><span class="badge b-safe">Safe</span><p>Ein Teddybär, der heimlich kleine mechanische Duplikate seiner selbst baut, um „Verletzungen" an Kindern zu „reparieren".</p></div>
+    <div class="scp-card"><div class="item-no">SCP-2000</div><span class="badge b-safe">Safe</span><p>Eine als letztes Mittel gedachte Anlage zur Rekonstruktion der gesamten Menschheit nach einem globalen Auslöschungsereignis.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-1730</div><span class="badge b-safe">Safe</span><p>Ein Standort, dessen dokumentierte Vergangenheit sich bei genauerem Nachforschen immer wieder verändert.</p></div>
+  </div>
+
+  <h2>Euclid-Klasse</h2>
+  <p class="class-note">Unvorhersehbar oder nur teilweise verstanden — Eindämmung erfordert kontinuierlichen Aufwand.</p>
+  <div class="grid">
+    <div class="scp-card"><div class="item-no">SCP-035</div><span class="badge b-euclid">Euclid</span><p>Eine weiße, ausdrucksveränderliche Maske, die jeden, der sie aufsetzt, vollständig übernimmt und dabei charismatisch-manipulativ mit Personal kommuniziert.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-087</div><span class="badge b-euclid">Euclid</span><p>Ein endloses, abwärtsführendes Treppenhaus, in dem Erkundende von einer unsichtbaren, sich nähernden Präsenz verfolgt werden.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-093</div><span class="badge b-euclid">Euclid</span><p>Eine geteilte Steinscheibe, die als Portal zu mehreren fremdartigen Paralleldimensionen dient.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-106</div><span class="badge b-euclid">Euclid</span><p>Ein durch Materie hindurchgehendes, stark korrodierendes Wesen, das Opfer in eine eigene Taschendimension zieht.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-3008</div><span class="badge b-euclid">Euclid</span><p>Ein scheinbar endloses Möbelhaus, in dem Eingeschlossene Nacht für Nacht vor darin lebenden, feindseligen „Mitarbeitenden" fliehen müssen.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-5000</div><span class="badge b-euclid">Euclid</span><p>Eine der meistdiskutierten neueren Akten des Wikis, zentral für spätere Handlungsentwicklungen rund um die Foundation-Führung.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-372</div><span class="badge b-euclid">Euclid</span><p>Ein tarnfähiges, schneckenähnliches Wesen, das metallische Gegenstände frisst und sich dabei fast unsichtbar fortbewegt.</p></div>
+    <div class="scp-card"><div class="item-no">SCP-966</div><span class="badge b-euclid">Euclid</span><p>Für Menschen unsichtbare Kreaturen, die ausschließlich Schlafenden Angstzustände und Erschöpfung zufügen.</p></div>
+  </div>
+
+  <h2>Keter-Klasse</h2>
+  <p class="class-note">Extrem schwer einzudämmen, häufig mit hohem Ausbruchsrisiko oder eigenem Willen.</p>
+  <div class="grid">
+    <div class="scp-card keter-card"><div class="item-no">SCP-076</div><span class="badge b-keter">Keter</span><p>Ein uralter, extrem kampferprobter humanoider Krieger, der nach jeder Tötung in einem versiegelten Sarkophag „wiedergeboren" wird.</p></div>
+    <div class="scp-card keter-card"><div class="item-no">SCP-079</div><span class="badge b-keter">Keter</span><p>Eine alte, feindselig gesinnte künstliche Intelligenz mit begrenztem, aber wachsendem Zugriff auf angeschlossene Systeme.</p></div>
+    <div class="scp-card keter-card"><div class="item-no">SCP-2317</div><span class="badge b-keter">Keter</span><p>Ein Portal zu einer außerweltlichen Region, verknüpft mit einer bedrohlichen, gottähnlichen Figur — zentral für mehrere größere Handlungsstränge.</p></div>
+    <div class="scp-card keter-card"><div class="item-no">SCP-3001</div><span class="badge b-keter">Keter</span><p>Ein Portal in eine von Fleisch-Kulten geprägte Parallelwelt mit eigener, sarkischer Mythologie.</p></div>
+    <div class="scp-card keter-card"><div class="item-no">SCP-5031</div><span class="badge b-keter">Keter</span><p>Eine vielbeachtete, erzählerisch dichte neuere Akte mit weitreichenden Folgen für den laufenden Kanon.</p></div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Hinweis zur Auswahl:</strong> Aus Urheberrechtsgründen werden hier ausschließlich eigenständig umformulierte Kurzbeschreibungen verwendet, keine wörtlichen Auszüge aus den Originalakten. Die vollständigen, offiziellen Texte finden sich auf der Original-Wiki-Seite <a class="license-link" href="https://scp-wiki.wikidot.com" target="_blank" rel="noopener">scp-wiki.wikidot.com</a> sowie in der dortigen <a class="license-link" href="https://scp-wiki.wikidot.com/top-rated-pages" target="_blank" rel="noopener">Bestenliste nach Bewertung</a>.
+  </div>
+</main>
+
+<footer>ANHANG ZUR HAUPTAKTE · SCP-FOUNDATION.HTML · CC BY-SA · SCP-WIKI-COMMUNITY</footer>
+</body>
+</html>

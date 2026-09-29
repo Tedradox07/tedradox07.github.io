@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundation Bauplan-Archiv — Untergrundanlagen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;
+  --bg-panel:#12151b;
+  --bg-panel-2:#181c24;
+  --ink:#dce2e8;
+  --ink-dim:#8890a0;
+  --amber:#e8a33d;
+  --amber-dim:#8a642a;
+  --cyan:#5ad1e6;
+  --danger:#c1382c;
+  --line:rgba(220,226,232,0.12);
+  --grid:rgba(90,209,230,0.07);
+  --mono:'JetBrains Mono',monospace;
+  --serif:'Source Serif 4',serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.6;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+  background-attachment:fixed;
+}
+::selection{background:var(--amber);color:#12151b;}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0b0d12 0%,rgba(11,13,18,0.94) 100%);border-bottom:1px solid var(--line);backdrop-filter:blur(6px);}
+.topbar-inner{max-width:1360px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+.brand{font-family:var(--mono);font-weight:800;letter-spacing:.14em;font-size:12.5px;color:var(--amber);text-transform:uppercase;display:flex;align-items:center;gap:10px;white-space:nowrap;}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.clearance-widget{margin-left:auto;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;color:var(--ink-dim);}
+.clearance-widget label{letter-spacing:.08em;text-transform:uppercase;}
+input[type=range]{-webkit-appearance:none;width:170px;height:4px;background:var(--line);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:3px;background:var(--amber);border:2px solid #12151b;cursor:pointer;box-shadow:0 0 10px rgba(232,163,61,.6);}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:3px;background:var(--amber);border:2px solid #12151b;cursor:pointer;}
+.clearance-level-badge{font-family:var(--mono);font-weight:700;font-size:11.5px;padding:3px 9px;border-radius:2px;border:1px solid var(--amber-dim);color:var(--amber);min-width:108px;text-align:center;}
+
+/* hero */
+.hero{max-width:1360px;margin:0 auto;padding:50px 24px 34px;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin:0 0 14px;}
+h1.title{font-family:var(--mono);font-weight:800;font-size:clamp(28px,4.6vw,50px);margin:0 0 16px;color:var(--ink);letter-spacing:-.01em;line-height:1.05;max-width:20ch;}
+h1.title span{color:var(--amber);}
+.hero p.lead{max-width:70ch;color:var(--ink-dim);font-size:16px;margin:0;}
+
+/* layout */
+.layout{max-width:1360px;margin:0 auto;padding:32px 24px 100px;display:grid;grid-template-columns:236px 1fr;gap:32px;}
+@media (max-width:900px){.layout{grid-template-columns:1fr;}}
+.nav-panel{position:sticky;top:70px;align-self:start;}
+.nav-title{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ink-dim);text-transform:uppercase;margin-bottom:10px;}
+.site-nav{list-style:none;margin:0;padding:0;border-left:1px solid var(--line);}
+.site-nav button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--ink-dim);font-family:var(--mono);font-size:12px;padding:8px 13px;cursor:pointer;border-left:2px solid transparent;margin-left:-1px;transition:all .15s;}
+.site-nav button b{color:var(--ink);display:block;font-size:13px;margin-bottom:1px;}
+.site-nav button:hover{background:var(--bg-panel);color:var(--ink);}
+.site-nav button.active{border-left-color:var(--amber);background:var(--bg-panel);color:var(--amber);}
+.site-nav button.active b{color:var(--amber);}
+.legend{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--ink-dim);}
+.legend div{display:flex;align-items:center;gap:8px;margin:5px 0;}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none;}
+
+/* dossier */
+.dossier{display:none;animation:fadein .3s ease;}
+.dossier.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.dossier-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px;}
+.dossier-head h2{font-family:var(--mono);font-size:24px;margin:0 0 6px;color:var(--ink);}
+.dossier-head .sub{color:var(--ink-dim);font-family:var(--mono);font-size:11.5px;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:2px;border:1px solid var(--line);color:var(--ink-dim);text-transform:uppercase;}
+.tag.hot{border-color:var(--danger);color:var(--danger);}
+
+.panel{background:var(--bg-panel);border:1px solid var(--line);border-radius:3px;padding:18px 20px;margin-bottom:20px;}
+.panel h3{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+.panel h3::before{content:'⌂';color:var(--ink-dim);}
+.panel p{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+.panel p:last-child{margin-bottom:0;}
+
+.classified{background:#171a22;color:#171a22;border-radius:1px;cursor:help;padding:0 2px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);position:relative;}
+.classified.revealed{background:transparent;color:var(--cyan);}
+.classified:not(.revealed):hover{animation:jitter .18s linear 2;}
+@keyframes jitter{0%{transform:translateX(0);}25%{transform:translateX(-1px);}75%{transform:translateX(1px);}100%{transform:translateX(0);}}
+.classified:not(.revealed):hover::after{content:'ZUGRIFF VERWEIGERT — CLEARANCE ' attr(data-level);position:absolute;left:0;bottom:120%;white-space:nowrap;background:var(--danger);color:#fff;font-family:var(--mono);font-size:9px;padding:3px 6px;border-radius:2px;z-index:5;}
+
+/* bauplan spec table */
+.spec-table{width:100%;border-collapse:collapse;font-size:13px;}
+.spec-table td{padding:7px 8px 7px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+.spec-table td.k{font-family:var(--mono);color:var(--ink-dim);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;width:38%;}
+.spec-table tr:last-child td{border-bottom:none;}
+
+/* exploded view */
+.exploded-wrap{position:relative;background:#0d1016;border:1px solid var(--line);border-radius:3px;padding:18px;overflow:auto;}
+.exploded-wrap svg{display:block;margin:0 auto;}
+.level-slab{cursor:pointer;transition:filter .15s;}
+.level-slab:hover{filter:brightness(1.3);}
+.level-slab-label{font-family:var(--mono);font-size:9px;fill:var(--ink);pointer-events:none;}
+.shaft-line{stroke:var(--cyan);stroke-width:1.2;stroke-dasharray:3 2;opacity:.75;}
+.shaft-dot{fill:var(--cyan);}
+.depth-tag{font-family:var(--mono);font-size:8.5px;fill:var(--ink-dim);}
+.exploded-caption{font-family:var(--mono);font-size:10px;color:var(--ink-dim);margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+
+/* level tabs + detail plan */
+.level-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px;}
+.level-tab{font-family:var(--mono);font-size:11.5px;padding:7px 13px;border:1px solid var(--line);background:var(--bg-panel-2);color:var(--ink-dim);border-radius:2px;cursor:pointer;transition:all .15s;}
+.level-tab:hover{color:var(--ink);}
+.level-tab.active{border-color:var(--amber);color:var(--amber);background:rgba(232,163,61,.08);}
+.level-desc{font-size:14px;color:var(--ink-dim);margin:0 0 14px;max-width:80ch;}
+
+.plan-wrap{position:relative;background:#0d1016;border:1px solid var(--line);border-radius:3px;padding:14px;}
+.plan-wrap svg{width:100%;height:auto;display:block;}
+.room{stroke:rgba(220,226,232,0.28);stroke-width:1;cursor:pointer;transition:filter .15s, stroke .15s;}
+.room:hover{stroke:var(--cyan);stroke-width:1.6;filter:brightness(1.4);}
+.room-label{font-family:'JetBrains Mono',monospace;font-size:6.6px;fill:var(--ink);pointer-events:none;letter-spacing:.02em;}
+.room-code{font-family:'JetBrains Mono',monospace;font-size:5.2px;fill:var(--ink-dim);pointer-events:none;}
+.dim-line{stroke:rgba(90,209,230,0.35);stroke-width:.6;}
+.dim-text{font-family:'JetBrains Mono',monospace;font-size:5.4px;fill:var(--cyan);opacity:.8;}
+.compass text{font-family:'JetBrains Mono',monospace;font-size:7px;fill:var(--ink-dim);}
+.compass path{stroke:var(--ink-dim);stroke-width:.8;fill:none;}
+.plan-caption{font-family:var(--mono);font-size:10px;color:var(--ink-dim);margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+
+.tooltip-box{position:fixed;pointer-events:none;background:#0d1016;border:1px solid var(--amber-dim);color:var(--ink);font-family:var(--mono);font-size:11px;padding:10px 13px;border-radius:2px;max-width:280px;line-height:1.5;opacity:0;transition:opacity .12s;z-index:99;box-shadow:0 10px 26px rgba(0,0,0,.55);}
+.tooltip-box b{color:var(--amber);display:block;font-size:11.5px;margin-bottom:4px;}
+.tooltip-box .loc{color:var(--cyan);}
+.tooltip-box.show{opacity:1;}
+
+.sector-table{width:100%;border-collapse:collapse;font-size:13px;}
+.sector-table th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim);border-bottom:1px solid var(--line);padding:6px 8px 8px 0;}
+.sector-table td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+.sector-table tr:last-child td{border-bottom:none;}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;}
+
+footer{border-top:1px solid var(--line);padding:30px 24px 60px;max-width:1360px;margin:0 auto;}
+footer p{font-family:var(--mono);font-size:11px;color:var(--ink-dim);max-width:74ch;}
+footer .disclaimer{opacity:.75;margin-top:12px;font-size:10.5px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="dot"></span> Foundation Bauplan-Archiv</div>
+    <div class="clearance-widget">
+      <label for="clearance">Clearance</label>
+      <input type="range" id="clearance" min="1" max="5" value="1" step="1">
+      <span class="clearance-level-badge" id="clearanceBadge">LEVEL 1</span>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <p class="eyebrow">Bauplan-Archiv · Untergrundanlagen · Nur für autorisiertes Personal</p>
+  <h1 class="title">Gesamtgrundriss<span> der Untergrundgebäude</span></h1>
+  <p class="lead">Jeder Eintrag zeigt das komplette Untergrundgebäude eines Standorts als Explosionsdarstellung aller Ebenen samt Verbindungsschacht, dazu jede Ebene einzeln als begehbaren Grundriss mit exakter Raumzuordnung sowie ein technisches Bauplan-Datenblatt (Bauverfahren, Tiefe, Wandaufbau, Energie- und Flutschutzsysteme).</p>
+</section>
+
+<div class="layout">
+  <nav class="nav-panel">
+    <div class="nav-title">Standortverzeichnis</div>
+    <ul class="site-nav" id="siteNav"></ul>
+    <div class="legend">
+      <div><i style="background:#3d5a80"></i> Verwaltung / Sicherheit</div>
+      <div><i style="background:#7a4b8a"></i> Forschung &amp; Labore</div>
+      <div><i style="background:#8a3a3a"></i> Anomalie-Containment</div>
+      <div><i style="background:#3f7a4f"></i> Medizin / Bio</div>
+      <div><i style="background:#6b6440"></i> Logistik / Lager</div>
+      <div><i style="background:#5ad1e6"></i> Schacht / Vertikalerschließung</div>
+      <div><i style="background:#222420"></i> Zugang gesperrt</div>
+    </div>
+  </nav>
+  <main id="dossierRoot"></main>
+</div>
+
+<footer>
+  <p>Dies ist ein fiktives Fan-Projekt im Stil der SCP Foundation. Sämtliche Standorte, Baupläne, Ebenen, Räume, Vorfälle und technischen Angaben sind vollständig erfunden und dienen der kreativen Darstellung — sie sind keine Wiedergabe realer Wiki-Artikel.</p>
+  <p class="disclaimer">Secure. Contain. Protect. — Diese Seite steht in keiner offiziellen Verbindung zur SCP Foundation Wiki-Community oder deren Rechteinhabern.</p>
+</footer>
+
+<div class="tooltip-box" id="tooltip"></div>
+
+<script>
+/* ============================================================
+   DATENMODELL — alle Inhalte sind frei erfunden (Fan-Fiction)
+   ============================================================ */
+const TYPE_COLORS = {
+  admin:'#3d5a80', research:'#7a4b8a', containment:'#8a3a3a',
+  medical:'#3f7a4f', storage:'#6b6440', locked:'#222420', shaft:'#5ad1e6'
+};
+
+const SITES = [
+{
+  id:'site-19', code:'Site-19', name:'Hauptarchiv & Schweres Containment', region:'Nordamerika',
+  planW:300, planH:230,
+  overview:`Site-19 ist der älteste durchgehend betriebene Großstandort der Foundation. Das Untergrundgebäude wurde in eine stillgelegte Kalisalzmine eingebaut und umfasst vier Ebenen, die über einen zentralen Doppelschacht mit der oberirdischen Tarnfassade verbunden sind.`,
+  history:`Baubeginn <span class="classified" data-level="3">1971, Fertigstellung 1974</span> unter Nutzung bestehender Stollen der ehemaligen Kalisalzmine „Grube Wendelin“. Die Ebenen UG2 bis UG4 wurden direkt in den vorhandenen Stollenquerschnitt eingezogen, UG1 wurde neu im Cut-and-Cover-Verfahren errichtet.`,
+  bauplan:{
+    jahr:'1971–1974, Erweiterung 1998', verfahren:'Umbau Bergwerksstollen (UG2–4) + Cut-and-Cover (UG1)',
+    tiefe:'Bis −86 m (UG4)', flaeche:'≈ 41.000 m² Gesamtnutzfläche',
+    waende:'Stahlbeton 0,9–1,4 m, in Containment-Bereichen zusätzlich 4 mm Bleiverkleidung',
+    energie:'Netzanschluss + 3 Dieselaggregate (72 h Autonomie) + USV für Sektor C',
+    flutschutz:'Grundwasserpumpen permanent aktiv, Flutungssensoren in allen Stollenabschnitten',
+    flucht:'6 Notausstiege über ehemalige Lüftungsschächte der Mine, 2 Personenaufzüge, 3 Treppenhäuser'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Verwaltung & Zugang', depthLabel:'−6 m',
+      desc:'Die oberste Ebene bildet die Schnittstelle zur Tarnfassade und beherbergt Empfang, Personalregistrierung und die Sicherheitszentrale. Vom zentralen Doppelschacht im Ostteil der Ebene führen zwei Treppenhäuser in die tieferen Ebenen.',
+      rooms:[
+        {x:15,y:15,w:80,h:55,label:'Empfang',code:'A-01',type:'admin',tip:'Direkt hinter der Tarnfassade gelegen, im nordwestlichen Bereich der Ebene. Dreistufige Identitätsprüfung vor Zutritt zum eigentlichen Verwaltungstrakt.'},
+        {x:105,y:15,w:70,h:55,label:'Personal',code:'A-04',type:'admin',tip:'Östlich an den Empfang angrenzend. Biometrische Erfassung neuer Mitarbeiter und Ausgabe temporärer Zugangschips.'},
+        {x:185,y:15,w:60,h:55,label:'Sicherheit',code:'A-07',type:'admin',tip:'Im nordöstlichen Eck der Ebene, mit direktem Blick auf die Zufahrtsrampe. Zentrale Überwachung sämtlicher Kameras der Tarnfassade.'},
+        {x:250,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Doppelschacht im Ostteil der Ebene, enthält zwei Personenaufzüge und ein Nottreppenhaus. Verbindet alle vier Ebenen durchgehend.'},
+        {x:15,y:80,w:130,h:50,label:'Besprechung',code:'A-11',type:'admin',tip:'Südlich des Empfangs, entlang des Hauptkorridors. Dient Lagebesprechungen der Standortleitung.'},
+        {x:155,y:80,w:95,h:50,label:'Archiv (physisch)',code:'A-18',type:'storage',tip:'Zentral in der Ebene, zwischen Besprechungsraum und Schacht. Lagerung physischer Akten, klimatisiert und feuergesichert.'}
+      ]},
+    {id:'UG2', label:'UG2 — Forschung', depthLabel:'−34 m',
+      desc:'Diese Ebene folgt dem Grundriss der ehemaligen Hauptstrecke der Mine und ist in einzelne, durch Schleusentüren getrennte Laborabschnitte unterteilt. Der Schacht mündet hier in einen kurzen Verbindungsgang zum zentralen Forschungskorridor.',
+      rooms:[
+        {x:15,y:15,w:70,h:60,label:'Labor D1–D2',code:'D-01/02',type:'research',tip:'Im westlichen Stollenabschnitt gelegen, thermische und akustische Testreihen unter kontrollierten Bedingungen.'},
+        {x:95,y:15,w:70,h:60,label:'Labor D3–D4',code:'D-03/04',type:'research',tip:'Direkt östlich an D1–D2 angrenzend, getrennt durch eine 60 cm starke Schallschutzwand. Biologische Analyse.'},
+        {x:175,y:15,w:60,h:60,label:'Kognito-Labor',code:'D-09',type:'research',tip:'Im ehemaligen Erzsortierraum der Mine untergebracht, dessen fensterlose Bauweise die Abschirmung erleichterte. Einwegspiegel-Beobachtung.'},
+        {x:245,y:15,w:35,h:60,label:'Schacht',code:'S-00',type:'shaft',tip:'Schachtmündung UG2, kurzer Verbindungsgang zum Forschungskorridor im Osten der Ebene.'},
+        {x:15,y:85,w:150,h:45,label:'Datenauswertung',code:'D-14',type:'research',tip:'Südlich der Labore, entlang des ehemaligen Förderstollens. Zentrale Serverbank für Messdaten aller Laborbereiche.'},
+        {x:175,y:85,w:105,h:45,label:'Materiallager',code:'L-02',type:'storage',tip:'Im südöstlichen Stollenteil, ehemaliger Erzlagerraum. Verbrauchsmaterial für Laborbetrieb.'}
+      ]},
+    {id:'UG3', label:'UG3 — Schweres Containment', depthLabel:'−58 m',
+      desc:'Die sicherheitskritischste Ebene liegt im tiefsten noch regelmäßig begangenen Stollenabschnitt. Alle Containment-Zellen sind entlang eines zentralen, gekrümmten Hauptstollens angeordnet, der dem ursprünglichen Streckenverlauf der Mine folgt.',
+      rooms:[
+        {x:15,y:15,w:55,h:75,label:'Zellen 1–6',code:'C-01/06',type:'containment',tip:'Westlichster Abschnitt des Hauptstollens. Sechs Standardzellen mit Doppelschleuse und unabhängiger Energieversorgung.'},
+        {x:80,y:15,w:55,h:75,label:'Zellen 7–12',code:'C-07/12',type:'containment',tip:'Mittlerer Stollenabschnitt, direkt an Zellen 1–6 anschließend. Verstärkte Zellen für kognitohazardäre Objekte.'},
+        {x:145,y:15,w:55,h:75,label:'Zellen 13–18',code:'C-13/18',type:'containment',tip:'Östlichster Zellenblock, unmittelbar vor der Schachtmündung. Seismisch isoliert wegen Nähe zu aktiven Stollenabschnitten.'},
+        {x:210,y:15,w:35,h:75,label:'Beobachtung',code:'C-OBS',type:'containment',tip:'Zwischen Zellenblock 13–18 und dem Schacht, mit Sichtachse auf den gesamten Hauptstollen.'},
+        {x:250,y:15,w:35,h:75,label:'Schacht',code:'S-00',type:'shaft',tip:'Tiefster regulärer Zugangspunkt des Doppelschachts, zusätzlich gesichert durch eine Schleusentür Typ IV.'},
+        {x:15,y:100,w:230,h:30,label:'Notfallschleuse Südstollen',code:'C-EX',type:'containment',tip:'Paralleler Fluchtstollen südlich des Hauptgangs, mündet in einen separaten, getarnten Lüftungsschacht an der Oberfläche.'}
+      ]},
+    {id:'UG4', label:'UG4 — Gesperrter Stollen', depthLabel:'−86 m',
+      desc:'<span class="classified" data-level="5">Der tiefste Stollenabschnitt ist seit 2003 für reguläres Personal gesperrt. Zutritt ausschließlich mit O5-Sonderfreigabe.</span>',
+      rooms:[
+        {x:15,y:15,w:270,h:70,label:'Gesperrter Stollen',code:'K-00',type:'locked',tip:'Erstreckt sich über die gesamte Ost-West-Länge der Mine. Funktion laut aktueller Klassifizierung nicht auflistbar.'},
+        {x:130,y:100,w:40,h:30,label:'Schacht (Ende)',code:'S-00',type:'shaft',tip:'Endpunkt des Doppelschachts, Zugang durch eine zusätzliche, unabhängig verriegelte Schleusentür getrennt.'}
+      ]}
+    ]
+},
+{
+  id:'site-17', code:'Site-17', name:'Humanoiden-Unterbringung', region:'Westeuropa',
+  planW:290, planH:210,
+  overview:`Site-17 liegt unter einem als landwirtschaftliches Gut getarnten Oberflächengebäude und umfasst drei Ebenen für die langfristige Unterbringung kooperativer humanoider Subjekte, Therapieräume sowie einen isolierten Rückzugsbereich.`,
+  history:`Die Untergrundanlage entstand <span class="classified" data-level="3">zwischen 1991 und 1994</span> im Cut-and-Cover-Verfahren unterhalb des bestehenden Gutshofs. Eine Erweiterung um den Rückzugsbereich in UG3 erfolgte 2009.`,
+  bauplan:{
+    jahr:'1991–1994, Erweiterung 2009', verfahren:'Cut-and-Cover unter bestehendem Gutshof',
+    tiefe:'Bis −22 m (UG3)', flaeche:'≈ 9.800 m² Gesamtnutzfläche',
+    waende:'Stahlbeton 0,6–0,9 m, Wohntrakt zusätzlich schallgedämmt',
+    energie:'Netzanschluss + 2 Dieselaggregate (48 h Autonomie)',
+    flutschutz:'Nicht erforderlich (Standort auf Anhöhe)',
+    flucht:'3 Notausstiege getarnt als Scheunenanbauten, 1 Personenaufzug, 2 Treppenhäuser'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Verwaltung', depthLabel:'−4 m',
+      desc:'Direkt unter dem Wohnhaus des Gutshofs gelegen. Beherbergt die Tarnverwaltung, Besucherempfang und Personalunterkünfte für nicht eingeweihte Hilfskräfte.',
+      rooms:[
+        {x:15,y:15,w:80,h:55,label:'Verwaltung',code:'V-01',type:'admin',tip:'Unmittelbar unter dem Wohnhaus, westlicher Gebäudeteil. Tarnbetrieb der landwirtschaftlichen Fassade.'},
+        {x:105,y:15,w:80,h:55,label:'Besucher',code:'V-04',type:'admin',tip:'Östlich der Verwaltung, mit separatem Zugang über die Scheunenrampe. Empfang für autorisierte externe Berater.'},
+        {x:195,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Zentraler Schacht im Ostteil der Ebene, verbindet Verwaltungsebene mit Wohntrakt und Rückzugsbereich.'},
+        {x:15,y:80,w:120,h:45,label:'Personalunterkünfte',code:'V-08',type:'admin',tip:'Südlich der Verwaltung, entlang des Hauptkorridors. Unterkünfte für Hilfspersonal ohne vollständige Einweihung.'}
+      ]},
+    {id:'UG2', label:'UG2 — Wohn- & Therapietrakt', depthLabel:'−12 m',
+      desc:'Kernstück der Anlage. Wohneinheiten liegen im Westflügel um einen begrünten Lichthof, Therapieräume im Ostflügel entlang des Beobachtungskorridors.',
+      rooms:[
+        {x:15,y:15,w:55,h:55,label:'Wohn 1',code:'W-01',type:'containment',tip:'Nordwestlicher Wohnflügel, direkt am Lichthof. Wohnzimmer, Küche und Rückzugsraum für ein hochkooperatives Subjekt.'},
+        {x:75,y:15,w:55,h:55,label:'Wohn 2/3',code:'W-02/03',type:'containment',tip:'Südlich an Wohn 1 angrenzend, um den Lichthof gruppiert. Zwei Einheiten für sozial verträgliche Subjekte.'},
+        {x:140,y:15,w:55,h:55,label:'Gemeinschaft',code:'W-CM',type:'containment',tip:'Zentral im Wohnflügel, direkter Zugang zum Lichthof. Begleitete soziale Interaktion unter Aufsicht.'},
+        {x:200,y:15,w:55,h:55,label:'Therapie A/B',code:'T-01/02',type:'research',tip:'Ostflügel, getrennt vom Wohnbereich durch den Beobachtungskorridor. Einzeltherapie mit Einwegspiegel.'},
+        {x:15,y:80,w:120,h:35,label:'Lichthof',code:'—',type:'admin',tip:'Begrünter Innenhof mit künstlicher Oberlichtsimulation, zentrales Element des Wohnflügels.'},
+        {x:200,y:80,w:55,h:35,label:'Beobachtung',code:'T-OBS',type:'research',tip:'Zwischen Wohn- und Therapietrakt, mit Sichtachse auf beide Bereiche.'}
+      ]},
+    {id:'UG3', label:'UG3 — Medizin & Rückzugsbereich', depthLabel:'−22 m',
+      desc:'Tiefste Ebene mit medizinischer Abteilung im Westteil und dem 2009 angebauten Rückzugsbereich im Ostteil, der über eine eigene Schleuse vom übrigen Trakt getrennt ist.',
+      rooms:[
+        {x:15,y:15,w:110,h:55,label:'Medizin',code:'M-01',type:'medical',tip:'Westlicher Teil der tiefsten Ebene, direkt unter dem Therapietrakt erreichbar über den Schacht. Auf nicht-menschliche Physiologie spezialisiert.'},
+        {x:135,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Tiefster Zugangspunkt des zentralen Schachts, zusätzlich durch eine Schleuse zum Rückzugsbereich gesichert.'},
+        {x:180,y:15,w:95,h:55,label:'Rückzugsbereich',code:'R-00',type:'locked',tip:'<span class="classified" data-level="4">Baulich 2009 angefügt, vollständig abgetrennt durch eigene Schleuse. Isolationsflügel für Subjekte nach Kooperationsverlust.</span>'}
+      ]}
+    ]
+},
+{
+  id:'site-06', code:'Site-06', name:'Maritimes Containment', region:'Küstenregion / Offshore',
+  planW:230, planH:250,
+  overview:`Site-06 besteht aus einer küstennahen Verwaltungseinrichtung und einer Offshore-Plattform, deren tragende Struktur unterhalb der Wasserlinie drei begehbare Decks umfasst, die druckgesichert und über einen zentralen Versorgungsschacht miteinander verbunden sind.`,
+  history:`Die Plattform wurde <span class="classified" data-level="3">1983 aus einer stillgelegten Bohrinsel umgebaut</span>, nachdem anomale Meeresströmungen wiederholt dokumentiert worden waren. Der Unterbau wurde dabei vollständig neu verstärkt und um zwei zusätzliche Decks ergänzt.`,
+  bauplan:{
+    jahr:'1983 Umbau, 1997 Erweiterung um Deck 3', verfahren:'Bohrinsel-Unterbau, verstärkt mit Stahlrahmenkonstruktion',
+    tiefe:'Bis −41 m unter der Wasserlinie (Deck 3)', flaeche:'≈ 6.400 m² Gesamtnutzfläche',
+    waende:'Doppelwandiger Stahlkörper mit Betonverguss, druckgesichert bis 6 bar',
+    energie:'Autarke Turbinenkopplung + Diesel-Redundanz (96 h Autonomie)',
+    flutschutz:'Vollautomatische Schottentüren an allen Decksübergängen, permanente Lecküberwachung',
+    flucht:'2 Auftauchkapseln, 1 Personenaufzug im Versorgungsschacht, 1 Nottreppenhaus'
+  },
+  levels:[
+    {id:'DECK1', label:'Deck 1 — Verwaltung & Anleger', depthLabel:'+2 m (über Wasserlinie)',
+      desc:'Oberstes Deck, teilweise über der Wasserlinie. Beherbergt die getarnte Küstenwache-Anlegestelle und die Verwaltungsräume für den Personaltransfer.',
+      rooms:[
+        {x:15,y:15,w:80,h:55,label:'Verwaltung',code:'K-01',type:'admin',tip:'Nordteil des obersten Decks, mit direktem Blick auf die Anlegestelle. Logistikzentrale für Personal- und Materialtransfer.'},
+        {x:105,y:15,w:60,h:55,label:'Anlegestelle',code:'K-05',type:'admin',tip:'Östlich der Verwaltung, einzige Verbindung zur Küste. Getarnt als Küstenwache-Station.'},
+        {x:175,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Zentraler Versorgungsschacht, verbindet alle drei Decks der Plattform durchgehend.'}
+      ]},
+    {id:'DECK2', label:'Deck 2 — Plattformkern', depthLabel:'−18 m',
+      desc:'Erstes vollständig unter Wasser liegendes Deck. Die beiden Containment-Module bilden den Kern der Plattform und sind über verstärkte Schottentüren vom Rest der Ebene getrennt.',
+      rooms:[
+        {x:15,y:15,w:75,h:60,label:'Plattformkern A',code:'P-01',type:'containment',tip:'Westlicher Bereich von Deck 2, druckgesichertes Modul für Anomalien in geringer Wassertiefe.'},
+        {x:95,y:15,w:75,h:60,label:'Plattformkern B',code:'P-04',type:'containment',tip:'Östlich an Kern A angrenzend, durch eine Schottentür getrennt. Variable Drucksteuerung für Tiefsee-Anomalien.'},
+        {x:175,y:15,w:35,h:60,label:'Schacht',code:'S-00',type:'shaft',tip:'Schachtmündung Deck 2, zusätzlich gesichert durch eine automatische Flutungssperre.'},
+        {x:15,y:80,w:110,h:35,label:'Nassdock',code:'N-01',type:'research',tip:'Südlich der Plattformkerne. Tauchschleuse und Unterwasserlabor für Feldbeobachtung ohne vollständige Entnahme.'}
+      ]},
+    {id:'DECK3', label:'Deck 3 — Medizin & Tiefendepot', depthLabel:'−41 m',
+      desc:'Tiefstes Deck, 1997 angebaut. Medizinische Druckkammern im Nordteil, gesperrtes Tiefendepot im Südteil unmittelbar über dem Meeresgrund.',
+      rooms:[
+        {x:15,y:15,w:90,h:55,label:'Medizin/Dekompression',code:'M-01',type:'medical',tip:'Nordteil von Deck 3, direkt unter dem Nassdock erreichbar. Druckkammern für tauchbedingte Zwischenfälle.'},
+        {x:115,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Tiefster Zugangspunkt des Versorgungsschachts, unmittelbar über dem verankerten Tiefendepot.'},
+        {x:15,y:80,w:135,h:35,label:'Tiefendepot',code:'T-00',type:'locked',tip:'<span class="classified" data-level="4">Verankerung großvolumiger Objekte am Meeresgrund unterhalb der Plattform. Koordinaten nicht auflistbar.</span>'}
+      ]}
+    ]
+},
+{
+  id:'site-88', code:'Site-88', name:'Urbane Tarneinrichtung', region:'Großstadt (unterirdisch)',
+  planW:270, planH:230,
+  overview:`Site-88 liegt vollständig unterirdisch unter einem regulär genutzten Bürokomplex und umfasst drei Ebenen, die offiziell im Rahmen einer U-Bahn-Erweiterung gebaut wurden. Die zivile Nutzung der Gebäude darüber bleibt unberührt.`,
+  history:`Bau erfolgte <span class="classified" data-level="4">1999–2002 getarnt als Tunnelvortrieb der städtischen U-Bahn-Linie 7</span>. Die tatsächliche Anlage liegt versetzt zur offiziellen Trassenführung.`,
+  bauplan:{
+    jahr:'1999–2002', verfahren:'Schildvortrieb (getarnt als U-Bahn-Tunnelbau)',
+    tiefe:'Bis −31 m (UG3)', flaeche:'≈ 7.100 m² Gesamtnutzfläche',
+    waende:'Tübbingausbau Stahlbeton 0,4 m + zusätzliche Dämmschicht gegen U-Bahn-Vibrationen',
+    energie:'Städtisches Netz (getarnter Sonderanschluss) + 2 Dieselaggregate (60 h Autonomie)',
+    flutschutz:'Rückstauklappen an allen Tunnelverbindungen zum U-Bahn-Netz',
+    flucht:'2 Zugangstunnel zum U-Bahn-Netz, 1 Personenaufzug, 1 Nottreppenhaus'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Einsatzzentrale', depthLabel:'−9 m',
+      desc:'Direkt unter dem Kellergeschoss des zivilen Bürokomplexes. Koordination mobiler Einsatzkräfte und städtischer Lageüberwachung.',
+      rooms:[
+        {x:15,y:15,w:85,h:55,label:'Einsatzzentrale',code:'E-01',type:'admin',tip:'Nordwestlicher Bereich, direkt unter dem zivilen Foyer. Koordination mobiler Einsatzkräfte, ausgelegt auf Reaktionszeiten unter 20 Minuten.'},
+        {x:110,y:15,w:70,h:55,label:'Lagezentrum',code:'E-04',type:'admin',tip:'Östlich der Einsatzzentrale. Echtzeitüberwachung städtischer Sensor- und Kamerafeeds.'},
+        {x:190,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Einziger Personenaufzug der Anlage, getarnt als Wartungsaufzug des Bürokomplexes.'}
+      ]},
+    {id:'UG2', label:'UG2 — Informationskontrolle & Containment', depthLabel:'−20 m',
+      desc:'Mittlere Ebene mit Serverräumen im Westteil und kompakten Containment-Zellen im Ostteil, getrennt durch eine verstärkte Brandschutzwand.',
+      rooms:[
+        {x:15,y:15,w:80,h:55,label:'Info-Kontrolle',code:'I-01',type:'research',tip:'Westlicher Bereich von UG2. Überwachung digitaler Anomalien und aktive Medienintervention.'},
+        {x:100,y:15,w:70,h:55,label:'Analyse-Server',code:'I-05',type:'research',tip:'Direkt östlich der Info-Kontrolle. Automatisierte Erkennung kognitohazardärer Inhalte in öffentlichen Netzwerken.'},
+        {x:175,y:15,w:50,h:55,label:'C-Zellen',code:'C-01/04',type:'containment',tip:'Östlichster Bereich, durch Brandschutzwand von den Serverräumen getrennt. Vier kompakte Zellen geringer physischer Größe.'}
+      ]},
+    {id:'UG3', label:'UG3 — Tunnelzugänge & Archiv', depthLabel:'−31 m',
+      desc:'Tiefste Ebene mit den beiden getarnten Zugangstunneln zum städtischen U-Bahn-Netz sowie dem gesperrten Amnestika-Archiv.',
+      rooms:[
+        {x:15,y:15,w:110,h:35,label:'Zugangstunnel A',code:'Z-01',type:'storage',tip:'Nordwestlich gelegen, mündet unauffällig in den regulären U-Bahn-Tunnel. Personaltransfer.'},
+        {x:135,y:15,w:110,h:35,label:'Zugangstunnel B',code:'Z-02',type:'storage',tip:'Parallel zu Tunnel A, ausschließlich für Notfallevakuierung freigegeben.'},
+        {x:15,y:60,w:120,h:40,label:'Archiv X — gesperrt',code:'X-00',type:'locked',tip:'<span class="classified" data-level="5">Protokollierung sämtlicher urbaner Amnestika-Einsätze. Zugriff ausschließlich für O5-Personal.</span>'}
+      ]}
+    ]
+},
+{
+  id:'site-01', code:'Site-01', name:'Sitz des O5-Rats', region:'Standort nicht auflistbar',
+  planW:250, planH:230,
+  overview:`Site-01 ist der administrative Kernstandort der Organisation. Der genaue geografische Standort ist selbst für Personal mit hoher Freigabe nicht bekannt; sämtliche baulichen Angaben unterliegen einer Geheimhaltungsstufe oberhalb dieses Registers.`,
+  history:`<span class="classified" data-level="5">Über die Bauzeit von Site-01 existieren keine für dieses Register freigegebenen Aufzeichnungen.</span>`,
+  bauplan:{
+    jahr:'Nicht auflistbar', verfahren:'Nicht auflistbar',
+    tiefe:'Angabe unterliegt Geheimhaltungsstufe 5', flaeche:'Nicht auflistbar',
+    waende:'Nicht auflistbar', energie:'Nicht auflistbar',
+    flutschutz:'Nicht auflistbar', flucht:'Nicht auflistbar'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Sicherheitsring', depthLabel:'Tiefe n. auflistbar',
+      desc:'<span class="classified" data-level="5">Mehrstufiger Sicherheitsperimeter mit voneinander unabhängigen, redundanten Zugangskontrollen.</span>',
+      rooms:[
+        {x:15,y:15,w:220,h:50,label:'Sicherheitsring',code:'S-00',type:'containment',tip:'Umschließt sämtliche darunterliegenden Ebenen vollständig. Weitere Angaben nicht auflistbar.'}
+      ]},
+    {id:'UG2', label:'UG2 — Verwaltung & Archiv', depthLabel:'Tiefe n. auflistbar',
+      desc:'Koordination sämtlicher Standortdirektionen weltweit sowie das zentrale Metaarchiv der Organisation.',
+      rooms:[
+        {x:15,y:15,w:100,h:60,label:'Verwaltungskern',code:'V-01',type:'admin',tip:'Koordination sämtlicher Standortdirektionen und Oversight-Ausschüsse weltweit von zentraler Stelle aus.'},
+        {x:125,y:15,w:100,h:60,label:'Archiv der Archive',code:'A-00',type:'research',tip:'Zentrales Metaarchiv mit Querverweisen auf sämtliche Standortdokumentationen der gesamten Organisation.'}
+      ]},
+    {id:'UG3', label:'UG3 — Ratssaal', depthLabel:'Tiefe n. auflistbar',
+      desc:'<span class="classified" data-level="5">Tagungsort der O5-Führungsebene. Weitere Angaben zu dieser Ebene sind nicht auflistbar.</span>',
+      rooms:[
+        {x:60,y:15,w:130,h:60,label:'Ratssaal',code:'R-00',type:'locked',tip:'Tagungsort der O5-Führungsebene. Weitere Angaben zu diesem Raum sind nicht auflistbar.'}
+      ]}
+    ]
+},
+{
+  id:'site-23', code:'Site-23', name:'Biologische Sicherheit & Tierhaltung', region:'Ländliches Gebiet, Süden',
+  planW:280, planH:230,
+  overview:`Site-23 ist auf biologische Anomalien mit hohem Infektionsrisiko sowie anomale Fauna spezialisiert. Das Untergrundgebäude ist in konzentrisch angeordnete Schleusenringe gegliedert, wobei die Kontaminationsgefahr von außen nach innen zunimmt.`,
+  history:`Errichtet <span class="classified" data-level="3">1986–1989</span> in Sprengvortrieb-Bauweise im gewachsenen Fels, um eine vollständig fugenlose, luftdicht abschließbare Struktur zu erreichen.`,
+  bauplan:{
+    jahr:'1986–1989', verfahren:'Sprengvortrieb im gewachsenen Fels, fugenlose Innenschale',
+    tiefe:'Bis −29 m (UG3)', flaeche:'≈ 5.900 m² Gesamtnutzfläche',
+    waende:'Stahlbeton 0,8 m mit durchgehender Innenschale aus Edelstahl (luftdicht)',
+    energie:'Netzanschluss + 2 Dieselaggregate (120 h Autonomie für Lüftungssystem)',
+    flutschutz:'Nicht primär relevant, Fokus auf Über-/Unterdrucksteuerung der Belüftungszonen',
+    flucht:'1 Notausstieg mit vorgeschalteter Dekontaminationsschleuse, 1 Treppenhaus'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Äußerer Ring', depthLabel:'−7 m',
+      desc:'Der äußere Ring bildet die niedrigste Kontaminationsstufe und beherbergt Verwaltung sowie die erste Schleusenstation.',
+      rooms:[
+        {x:15,y:15,w:90,h:55,label:'Verwaltung',code:'V-01',type:'admin',tip:'Nordbereich des äußeren Rings, direkt am regulären Zugang. Niedrigste Kontaminationsstufe der gesamten Anlage.'},
+        {x:115,y:15,w:60,h:55,label:'Schleuse I',code:'SL-1',type:'admin',tip:'Östlich der Verwaltung. Erste von drei Schleusenstufen vor Zutritt zum inneren Ring.'},
+        {x:185,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Zentraler Versorgungsschacht, durchläuft alle drei Ringe konzentrisch entlang der Mittelachse.'}
+      ]},
+    {id:'UG2', label:'UG2 — Mittlerer Ring / Labore', depthLabel:'−18 m',
+      desc:'Mittlerer Ring mit erhöhter Schleusenstufe. Labore sind ringförmig um den zentralen Schacht angeordnet.',
+      rooms:[
+        {x:15,y:15,w:70,h:55,label:'Labor B1',code:'B-01',type:'research',tip:'Westlicher Abschnitt des mittleren Rings, zweite Kontaminationsstufe. Analyse biologischer Proben.'},
+        {x:95,y:15,w:70,h:55,label:'Labor B2',code:'B-02',type:'research',tip:'Südlich an B1 angrenzend, ringförmig um den Schacht angeordnet.'},
+        {x:175,y:15,w:70,h:55,label:'Tierhaltung',code:'B-07',type:'containment',tip:'Östlicher Ringabschnitt, unmittelbar an die Labore angebunden. Haltung anomaler Fauna geringer Größe.'}
+      ]},
+    {id:'UG3', label:'UG3 — Innerer Ring (Hochsicherheit)', depthLabel:'−29 m',
+      desc:'Innerster und tiefster Ring mit höchster Kontaminationsstufe. Nur über die dritte Schleusenstufe erreichbar.',
+      rooms:[
+        {x:15,y:15,w:80,h:60,label:'Hochsicherheits-Containment',code:'H-01',type:'containment',tip:'<span class="classified" data-level="4">Innerster Ring, höchste Kontaminationsstufe. Vollständig eigenständige Belüftung, unabhängig vom restlichen Gebäude.</span>'},
+        {x:105,y:15,w:60,h:60,label:'Schleuse III',code:'SL-3',type:'locked',tip:'Letzte Schleusenstufe vor dem inneren Ring, inklusive Vollkörper-Dekontamination.'}
+      ]}
+    ]
+},
+{
+  id:'site-45', code:'Site-45', name:'Arktis-Station', region:'Arktis, unter Eisschild',
+  planW:260, planH:220,
+  overview:`Site-45 liegt unter mehreren Metern Packeis und dient der Untersuchung kälte- und eisbezogener Anomalien. Die drei Ebenen sind über einen beheizten Schacht verbunden, der auch als primäre Energietrasse dient.`,
+  history:`Errichtet <span class="classified" data-level="3">1978</span> mittels Schmelzbohrverfahren durch das Packeis, anschließend Ausbau der Kavernen im darunterliegenden Fels.`,
+  bauplan:{
+    jahr:'1978, Sanierung 2011', verfahren:'Schmelzbohrverfahren + Kavernenausbau im Fels',
+    tiefe:'Bis −27 m unter der Eisoberfläche (UG3)', flaeche:'≈ 4.300 m² Gesamtnutzfläche',
+    waende:'Stahlbeton 0,7 m mit zusätzlicher Wärmedämmung gegen Permafrost',
+    energie:'Geothermie-Kopplung + 2 Dieselaggregate (240 h Autonomie, wetterbedingt hoch angesetzt)',
+    flutschutz:'Schmelzwasserdrainage an allen Kavernenwänden',
+    flucht:'1 beheizter Notausstieg zur Oberfläche, 1 Treppenhaus'
+  },
+  levels:[
+    {id:'UG1', label:'UG1 — Versorgung & Verwaltung', depthLabel:'−6 m',
+      desc:'Unmittelbar unter der Eisoberfläche. Enthält die Energiezentrale und die Verwaltungsräume der kleinen Stammbesatzung.',
+      rooms:[
+        {x:15,y:15,w:90,h:55,label:'Verwaltung',code:'V-01',type:'admin',tip:'Südlicher Bereich, nahe dem beheizten Notausstieg. Verwaltung der kleinen Stammbesatzung.'},
+        {x:115,y:15,w:70,h:55,label:'Energiezentrale',code:'E-01',type:'storage',tip:'Nördlich der Verwaltung, Anbindung an die Geothermie-Kopplung und die Dieselaggregate.'},
+        {x:195,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Beheizter Zentralschacht, dient zugleich als primäre Energie- und Wärmetrasse der Anlage.'}
+      ]},
+    {id:'UG2', label:'UG2 — Forschung', depthLabel:'−17 m',
+      desc:'In den Fels geschlagene Kaverne mit Laboren für kälte- und eisbezogene Anomalien.',
+      rooms:[
+        {x:15,y:15,w:90,h:55,label:'Kälte-Labor',code:'F-01',type:'research',tip:'Westlicher Teil der Kaverne, permanent auf unter −40 °C gekühlt für objektspezifische Testreihen.'},
+        {x:115,y:15,w:90,h:55,label:'Eiskern-Analyse',code:'F-06',type:'research',tip:'Östlich des Kälte-Labors, Auswertung von Eisbohrkernen aus dem umgebenden Packeis.'}
+      ]},
+    {id:'UG3', label:'UG3 — Containment', depthLabel:'−27 m',
+      desc:'Tiefste Kaverne mit den Containment-Bereichen für die größeren Anomalien der Station.',
+      rooms:[
+        {x:15,y:15,w:110,h:55,label:'Containment (Kälte)',code:'C-01/03',type:'containment',tip:'<span class="classified" data-level="3">Drei Zellen mit unabhängiger Kühlsteuerung, tiefster und kältester Bereich der gesamten Station.</span>'}
+      ]}
+    ]
+},
+{
+  id:'site-77', code:'Site-77', name:'Getarnte Silo-Anlage', region:'Ehemaliges Raketensilo, Grasland',
+  planW:220, planH:250,
+  overview:`Site-77 ist aus einem ausgemusterten Interkontinentalraketensilo hervorgegangen. Statt horizontaler Ebenen ist die Anlage in vier übereinanderliegende Ringe um den ehemaligen Abschussschacht organisiert, der heute als zentraler Versorgungs- und Transportschacht dient.`,
+  history:`Übernahme des stillgelegten Silos <span class="classified" data-level="3">1994</span> von einer aufgelösten Militäreinheit. Der ursprüngliche Raketenschacht wurde entkernt und dient seither als vertikale Erschließung aller vier Ringe.`,
+  bauplan:{
+    jahr:'1994 Übernahme, Umbau bis 1996', verfahren:'Umbau eines stillgelegten Interkontinentalraketensilos',
+    tiefe:'Bis −52 m (Ring 4)', flaeche:'≈ 3.100 m² Gesamtnutzfläche',
+    waende:'Ursprüngliche Silobewehrung Stahlbeton 1,8 m, innen zusätzlich ausgekleidet',
+    energie:'Netzanschluss + 1 Dieselaggregat (96 h Autonomie)',
+    flutschutz:'Nicht relevant (trockener Standort)',
+    flucht:'1 Lastenaufzug im ehemaligen Raketenschacht, 1 Nottreppenhaus außen am Schacht'
+  },
+  levels:[
+    {id:'RING1', label:'Ring 1 — Verwaltung', depthLabel:'−9 m',
+      desc:'Oberster Ring direkt unter der getarnten Oberflächenstruktur (ehemaliges Kontrollhäuschen des Silos).',
+      rooms:[
+        {x:15,y:15,w:90,h:55,label:'Verwaltung',code:'V-01',type:'admin',tip:'Ringförmig um den zentralen Schacht angeordnet, Zugang über das getarnte ehemalige Kontrollhäuschen.'},
+        {x:115,y:15,w:35,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Ehemaliger Raketenschacht, heute entkernt und als zentraler Lastenaufzug für alle vier Ringe genutzt.'}
+      ]},
+    {id:'RING2', label:'Ring 2 — Forschung', depthLabel:'−23 m',
+      desc:'Ringförmig angeordnete Labore, die die ursprüngliche kreisrunde Silostruktur nachzeichnen.',
+      rooms:[
+        {x:15,y:15,w:70,h:55,label:'Labor Ring 2',code:'F-01',type:'research',tip:'Folgt der kreisrunden Innenkontur des ehemaligen Silos, Analyse von Objekten mit ballistischem Bezug.'},
+        {x:95,y:15,w:55,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Zentraler Schachtdurchgang auf Höhe Ring 2, mit Zwischenplattform für Materialtransfer.'}
+      ]},
+    {id:'RING3', label:'Ring 3 — Containment', depthLabel:'−38 m',
+      desc:'Verstärkter Ring mit der ursprünglichen Silobewehrung als äußerer Schale, genutzt für Objekte mit hoher kinetischer Gefährdung.',
+      rooms:[
+        {x:15,y:15,w:70,h:55,label:'Containment',code:'C-01/02',type:'containment',tip:'<span class="classified" data-level="4">Nutzt die 1,8 m starke ursprüngliche Silobewehrung als äußere Schutzschicht gegen kinetische Energiefreisetzung.</span>'},
+        {x:95,y:15,w:55,h:55,label:'Schacht',code:'S-00',type:'shaft',tip:'Schachtdurchgang auf Höhe Ring 3, zusätzlich gesichert durch eine Druckschleuse.'}
+      ]},
+    {id:'RING4', label:'Ring 4 — Silosohle', depthLabel:'−52 m',
+      desc:'Tiefster Ring am ehemaligen Silogrund, dient heute als Reservelager und Enddepot für großvolumige Objekte.',
+      rooms:[
+        {x:15,y:15,w:100,h:55,label:'Silosohle / Depot',code:'L-00',type:'storage',tip:'Ehemaliger Silogrund, kreisrunder Raum mit dem größten nutzbaren Durchmesser der gesamten Anlage.'}
+      ]}
+    ]
+}
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const nav = document.getElementById('siteNav');
+const root = document.getElementById('dossierRoot');
+const tooltip = document.getElementById('tooltip');
+let clearance = 1;
+const activeLevelIdx = {}; // site.id -> level index
+
+function clearanceLabel(n){
+  return ['LEVEL 1','LEVEL 2','LEVEL 3','LEVEL 4','LEVEL 5 · O5'][n-1];
+}
+
+SITES.forEach((site,i)=>{
+  activeLevelIdx[site.id] = 0;
+  const li = document.createElement('li');
+  const btn = document.createElement('button');
+  btn.innerHTML = `<b>${site.code}</b>${site.name}`;
+  btn.dataset.idx = i;
+  btn.addEventListener('click', ()=> showSite(i));
+  li.appendChild(btn);
+  nav.appendChild(li);
+
+  const d = document.createElement('div');
+  d.className='dossier';
+  d.id='d-'+site.id;
+  root.appendChild(d);
+});
+
+function specRow(k,v){ return `<tr><td class="k">${k}</td><td>${v}</td></tr>`; }
+
+function renderDossier(site){
+  const b = site.bauplan;
+  return `
+  <div class="dossier-head">
+    <div>
+      <h2>${site.code} <span style="color:var(--ink-dim);font-weight:400;font-size:15px;">— ${site.name}</span></h2>
+      <div class="sub">${site.region} · ${site.levels.length} Ebenen erfasst</div>
+    </div>
+    <div class="tag-row"><span class="tag hot">Gesamttiefe ${b.tiefe}</span></div>
+  </div>
+
+  <div class="panel"><h3>Übersicht</h3><p>${site.overview}</p></div>
+  <div class="panel"><h3>Entstehung</h3><p>${site.history}</p></div>
+
+  <div class="panel">
+    <h3>Bauplan-Datenblatt</h3>
+    <table class="spec-table">
+      ${specRow('Baujahr', b.jahr)}
+      ${specRow('Bauverfahren', b.verfahren)}
+      ${specRow('Gesamttiefe', b.tiefe)}
+      ${specRow('Grundfläche', b.flaeche)}
+      ${specRow('Wandaufbau', b.waende)}
+      ${specRow('Energieversorgung', b.energie)}
+      ${specRow('Flutschutz', b.flutschutz)}
+      ${specRow('Fluchtwege', b.flucht)}
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>Gesamtgrundriss — Explosionsdarstellung aller Ebenen</h3>
+    <div class="exploded-wrap" id="exp-${site.id}"></div>
+    <div class="exploded-caption"><span>Ebenen von oben (Zugang) nach unten (Tiefe) gestaffelt dargestellt</span><span>Klick auf eine Ebene öffnet den Detail-Grundriss</span></div>
+  </div>
+
+  <div class="panel">
+    <h3>Ebenen im Detail</h3>
+    <div class="level-tabs" id="tabs-${site.id}"></div>
+    <p class="level-desc" id="leveldesc-${site.id}"></p>
+    <div class="plan-wrap" id="plan-${site.id}"></div>
+    <div class="plan-caption"><span>Maßstab schematisch · nicht navigationsfähig</span><span>Klick auf Räume für exakte Ortsangabe</span></div>
+  </div>`;
+}
+
+/* Explosionsdarstellung: alle Ebenen gestaffelt übereinander, Schacht verbindet sie */
+function buildExploded(site){
+  const n = site.levels.length;
+  const offX = 22, offY = 40;
+  const totalW = site.planW + offX*(n-1) + 20;
+  const totalH = site.planH + offY*(n-1) + 20;
+  let groups = '';
+  let shaftPoints = [];
+
+  site.levels.forEach((lvl,i)=>{
+    const tx = 10 + i*offX;
+    const ty = 10 + i*offY;
+    const opacity = Math.max(0.32, 1 - i*(0.68/(n-1||1)));
+    const rects = lvl.rooms.map(r=>{
+      const color = TYPE_COLORS[r.type] || '#333';
+      return `<rect class="level-slab" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" fill-opacity="${opacity}" stroke="rgba(220,226,232,0.25)" data-site="${site.id}" data-level="${i}"/>`;
+    }).join('');
+    const shaftRoom = lvl.rooms.find(r=>r.type==='shaft') || lvl.rooms[lvl.rooms.length-1];
+    const cx = tx + shaftRoom.x + shaftRoom.w/2;
+    const cy = ty + shaftRoom.y + shaftRoom.h/2;
+    shaftPoints.push({x:cx,y:cy});
+    groups += `<g transform="translate(${tx},${ty})" style="cursor:pointer" data-site="${site.id}" data-level="${i}" class="level-slab">
+        ${rects}
+        <text class="level-slab-label depth-tag" x="4" y="-3">${lvl.label} (${lvl.depthLabel})</text>
+      </g>`;
+  });
+
+  let shaftLine = '';
+  for(let i=0;i<shaftPoints.length-1;i++){
+    const a=shaftPoints[i], b=shaftPoints[i+1];
+    shaftLine += `<line class="shaft-line" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+  }
+  shaftPoints.forEach(p=>{ shaftLine += `<circle class="shaft-dot" cx="${p.x}" cy="${p.y}" r="2.4"/>`; });
+
+  return `<svg viewBox="0 0 ${totalW} ${totalH}" width="${Math.min(totalW*1.6,620)}" xmlns="http://www.w3.org/2000/svg">
+    ${shaftLine}
+    ${groups}
+  </svg>`;
+}
+
+function buildFloorPlan(site, levelIdx){
+  const lvl = site.levels[levelIdx];
+  const rooms = lvl.rooms.map(r=>{
+    const color = TYPE_COLORS[r.type] || '#333';
+    return `<g class="room-g" data-tip="${(r.tip||r.label).replace(/"/g,'&quot;')}" data-name="${r.label}" data-code="${r.code||''}">
+      <rect class="room" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${color}" fill-opacity="0.55"/>
+      <text class="room-label" x="${r.x+5}" y="${r.y+14}">${r.label}</text>
+      <text class="room-code" x="${r.x+5}" y="${r.y+r.h-5}">${r.code||''}</text>
+    </g>`;
+  }).join('');
+  const w=site.planW, h=site.planH;
+  return `<svg viewBox="0 0 ${w} ${h+18}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="${w}" height="${h}" fill="none" stroke="rgba(220,226,232,0.1)"/>
+    <line class="dim-line" x1="0" y1="${h+8}" x2="${w}" y2="${h+8}"/>
+    <text class="dim-text" x="${w/2-14}" y="${h+16}">Ebene ${lvl.depthLabel}</text>
+    <g class="compass" transform="translate(${w-20},${h-18})">
+      <path d="M0,10 L0,-10 M-4,-6 L0,-10 L4,-6"/>
+      <text x="-3" y="-13">N</text>
+    </g>
+    ${rooms}
+  </svg>`;
+}
+
+function renderLevelTabs(site){
+  return site.levels.map((lvl,i)=>`<button class="level-tab ${i===activeLevelIdx[site.id]?'active':''}" data-site="${site.id}" data-level="${i}">${lvl.label}</button>`).join('');
+}
+
+function refreshSiteView(site){
+  const idx = activeLevelIdx[site.id];
+  const lvl = site.levels[idx];
+  document.getElementById('exp-'+site.id).innerHTML = buildExploded(site);
+  document.getElementById('tabs-'+site.id).innerHTML = renderLevelTabs(site);
+  document.getElementById('leveldesc-'+site.id).innerHTML = lvl.desc;
+  document.getElementById('plan-'+site.id).innerHTML = buildFloorPlan(site, idx);
+
+  // exploded-view level click -> switch tab
+  document.querySelectorAll(`#exp-${site.id} [data-site="${site.id}"]`).forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeLevelIdx[site.id] = parseInt(el.dataset.level,10);
+      refreshSiteView(site);
+      document.getElementById('plan-'+site.id).scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+  // level tab click
+  document.querySelectorAll(`#tabs-${site.id} .level-tab`).forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeLevelIdx[site.id] = parseInt(el.dataset.level,10);
+      refreshSiteView(site);
+    });
+  });
+  attachTooltips();
+  applyClearance();
+}
+
+function attachTooltips(){
+  document.querySelectorAll('.room-g').forEach(g=>{
+    g.onmousemove = (e)=>{
+      tooltip.innerHTML = `<b>${g.dataset.name} <span class="loc">${g.dataset.code}</span></b>${g.dataset.tip}`;
+      tooltip.style.left = (e.clientX+16)+'px';
+      tooltip.style.top = (e.clientY+16)+'px';
+      tooltip.classList.add('show');
+    };
+    g.onmouseleave = ()=> tooltip.classList.remove('show');
+  });
+}
+
+function applyClearance(){
+  document.querySelectorAll('.classified').forEach(el=>{
+    const need = parseInt(el.dataset.level,10);
+    el.classList.toggle('revealed', clearance >= need);
+  });
+}
+
+function showSite(i){
+  const site = SITES[i];
+  document.querySelectorAll('.dossier').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.site-nav button').forEach(b=>b.classList.remove('active'));
+  const d = document.getElementById('d-'+site.id);
+  if(!d.dataset.built){
+    d.innerHTML = renderDossier(site);
+    d.dataset.built = '1';
+  }
+  d.classList.add('active');
+  document.querySelector(`.site-nav button[data-idx="${i}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  refreshSiteView(site);
+}
+
+document.getElementById('clearance').addEventListener('input', (e)=>{
+  clearance = parseInt(e.target.value,10);
+  document.getElementById('clearanceBadge').textContent = clearanceLabel(clearance);
+  applyClearance();
+});
+
+document.getElementById('clearanceBadge').textContent = clearanceLabel(clearance);
+showSite(0);
+</script>
+</body>
+</html>
